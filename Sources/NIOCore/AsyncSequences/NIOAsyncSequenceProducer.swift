@@ -141,7 +141,7 @@ public struct NIOAsyncSequenceProducer<
     ///   - backPressureStrategy: The back-pressure strategy of the sequence.
     ///   - delegate: The delegate of the sequence
     /// - Returns: A ``NIOAsyncSequenceProducer/Source`` and a ``NIOAsyncSequenceProducer``.
-    @inlinable
+    
     public static func makeSequence(
         elementType: Element.Type = Element.self,
         backPressureStrategy: Strategy,
@@ -158,7 +158,7 @@ public struct NIOAsyncSequenceProducer<
         return .init(source: Source(throwingSource: newSequence.source), sequence: sequence)
     }
 
-    @inlinable
+    
     /* private */ internal init(
         throwingSequence: NIOThrowingAsyncSequenceProducer<Element, Never, Strategy, Delegate>
     ) {
@@ -195,7 +195,7 @@ extension NIOAsyncSequenceProducer {
             self._throwingIterator = throwingIterator
         }
 
-        @inlinable
+        
         public func next() async -> Element? {
             // this call will only throw if cancelled and we want to just return nil in that case
             return try? await self._throwingIterator.next()
@@ -225,12 +225,12 @@ extension NIOAsyncSequenceProducer {
             @usableFromInline
             /* fileprivate */ internal let _throwingSource: ThrowingSource
 
-            @inlinable
+            
             init(throwingSource: ThrowingSource) {
                 self._throwingSource = throwingSource
             }
 
-            @inlinable
+            
             deinit {
                 // We need to call finish here to resume any suspended continuation.
                 self._throwingSource.finish()
@@ -276,7 +276,7 @@ extension NIOAsyncSequenceProducer {
         /// - Parameter contentsOf: The sequence to yield.
         /// - Returns: A ``NIOAsyncSequenceProducer/Source/YieldResult`` that indicates if the yield was successful
         /// and if more elements should be produced.
-        @inlinable
+        
         public func yield<S: Sequence>(contentsOf sequence: S) -> YieldResult where S.Element == Element {
             switch self._throwingSource.yield(contentsOf: sequence) {
             case .stopProducing:
@@ -302,7 +302,7 @@ extension NIOAsyncSequenceProducer {
         /// - Parameter element: The element to yield.
         /// - Returns: A ``NIOAsyncSequenceProducer/Source/YieldResult`` that indicates if the yield was successful
         /// and if more elements should be produced.
-        @inlinable
+        
         public func yield(_ element: Element) -> YieldResult {
             self.yield(contentsOf: CollectionOfOne(element))
         }
@@ -316,7 +316,7 @@ extension NIOAsyncSequenceProducer {
         /// Otherwise, the buffered elements will be dropped.
         ///
         /// - Note: Calling this function more than once has no effect.
-        @inlinable
+        
         public func finish() {
             self._throwingSource.finish()
         }

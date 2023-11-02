@@ -18,7 +18,7 @@ extension EventLoopFuture {
     /// This function can be used to bridge an `EventLoopFuture` into the `async` world. Ie. if you're in an `async`
     /// function and want to get the result of this future.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     public func get() async throws -> Value {
         return try await withUnsafeThrowingContinuation { (cont: UnsafeContinuation<UnsafeTransfer<Value>, Error>) in
             self.whenComplete { result in
@@ -36,7 +36,7 @@ extension EventLoopFuture {
 extension EventLoopGroup {
     /// Shuts down the event loop gracefully.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     public func shutdownGracefully() async throws {
         return try await withCheckedThrowingContinuation { cont in
             self.shutdownGracefully { error in
@@ -60,7 +60,7 @@ extension EventLoopPromise {
     /// - returns: A `Task` which was created to `await` the `body`.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     @discardableResult
-    @inlinable
+    
     public func completeWithTask(_ body: @escaping @Sendable () async throws -> Value) -> Task<Void, Never> {
         Task {
             do {
@@ -81,21 +81,21 @@ extension Channel {
     ///     - promise: the `EventLoopPromise` that will be notified once the `write` operation completes,
     ///                or `nil` if not interested in the outcome of the operation.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     public func writeAndFlush<T>(_ any: T) async throws {
         try await self.writeAndFlush(any).get()
     }
 
     /// Set `option` to `value` on this `Channel`.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     public func setOption<Option: ChannelOption>(_ option: Option, value: Option.Value) async throws {
         try await self.setOption(option, value: value).get()
     }
 
     /// Get the value of `option` for this `Channel`.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     public func getOption<Option: ChannelOption>(_ option: Option) async throws -> Option.Value {
         return try await self.getOption(option).get()
     }
@@ -196,7 +196,7 @@ extension ChannelPipeline {
 
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
     @available(*, deprecated, message: "ChannelHandlerContext is not Sendable and it is therefore not safe to be used outside of its EventLoop")
-    @inlinable
+    
     public func context<Handler: ChannelHandler>(handlerType: Handler.Type) async throws -> ChannelHandlerContext {
         return try await self.context(handlerType: handlerType).get()
     }
@@ -226,7 +226,7 @@ extension AsyncSequence where Element: RandomAccessCollection, Element.Element =
     ///   - maxBytes: The maximum number of bytes this method is allowed to write into `accumulationBuffer`
     /// - Throws: `NIOTooManyBytesError` if the the sequence contains more than `maxBytes`.
     /// Note that previous elements of `self` might already be write to `accumulationBuffer`.
-    @inlinable
+    
     public func collect(
         upTo maxBytes: Int,
         into accumulationBuffer: inout ByteBuffer
@@ -247,7 +247,7 @@ extension AsyncSequence where Element: RandomAccessCollection, Element.Element =
     ///   - maxBytes: The maximum number of bytes this method is allowed to accumulate
     ///   - allocator: Allocator used for allocating the result `ByteBuffer`
     /// - Throws: `NIOTooManyBytesError` if the the sequence contains more than `maxBytes`.
-    @inlinable
+    
     public func collect(
         upTo maxBytes: Int,
         using allocator: ByteBufferAllocator
@@ -269,7 +269,7 @@ extension AsyncSequence where Element == ByteBuffer {
     ///   - maxBytes: The maximum number of bytes this method is allowed to write into `accumulationBuffer`
     /// - Throws: ``NIOTooManyBytesError`` if the the sequence contains more than `maxBytes`.
     /// Note that previous elements of `self` might be already write to `accumulationBuffer`.
-    @inlinable
+    
     public func collect(
         upTo maxBytes: Int,
         into accumulationBuffer: inout ByteBuffer
@@ -289,7 +289,7 @@ extension AsyncSequence where Element == ByteBuffer {
     /// - Parameters:
     ///   - maxBytes: The maximum number of bytes this method is allowed to accumulate
     /// - Throws: `NIOTooManyBytesError` if the the sequence contains more than `maxBytes`.
-    @inlinable
+    
     public func collect(
         upTo maxBytes: Int
     ) async throws -> ByteBuffer {
@@ -322,18 +322,18 @@ struct AsyncSequenceFromIterator<AsyncIterator: AsyncIteratorProtocol>: AsyncSeq
     
     @usableFromInline var iterator: AsyncIterator
     
-    @inlinable init(_ iterator: AsyncIterator) {
+     init(_ iterator: AsyncIterator) {
         self.iterator = iterator
     }
     
-    @inlinable func makeAsyncIterator() -> AsyncIterator {
+     func makeAsyncIterator() -> AsyncIterator {
         self.iterator
     }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension EventLoop {
-    @inlinable
+    
     public func makeFutureWithTask<Return>(_ body: @Sendable @escaping () async throws -> Return) -> EventLoopFuture<Return> {
         let promise = self.makePromise(of: Return.self)
         promise.completeWithTask(body)

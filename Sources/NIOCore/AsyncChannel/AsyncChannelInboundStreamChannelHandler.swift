@@ -81,7 +81,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
     @usableFromInline
     let transformation: Transformation
 
-    @inlinable
+    
     init(
         eventLoop: EventLoop,
         closeRatchet: CloseRatchet,
@@ -93,7 +93,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
     }
 
     /// Creates a new ``NIOAsyncChannelInboundStreamChannelHandler`` which is used when the pipeline got synchronously wrapped.
-    @inlinable
+    
     static func makeHandler(
         eventLoop: EventLoop,
         closeRatchet: CloseRatchet
@@ -106,7 +106,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
     }
 
     /// Creates a new ``NIOAsyncChannelInboundStreamChannelHandler`` which has hooks for transformations.
-    @inlinable
+    
     static func makeHandlerWithTransformations(
         eventLoop: EventLoop,
         closeRatchet: CloseRatchet,
@@ -121,18 +121,18 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
         )
     }
 
-    @inlinable
+    
     func handlerAdded(context: ChannelHandlerContext) {
         self.context = context
     }
 
-    @inlinable
+    
     func handlerRemoved(context: ChannelHandlerContext) {
         self._finishSource(context: context)
         self.context = nil
     }
 
-    @inlinable
+    
     func channelRead(context: ChannelHandlerContext, data: NIOAny) {
         let unwrapped = self.unwrapInboundIn(data)
 
@@ -163,7 +163,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
         }
     }
 
-    @inlinable
+    
     func _transformationCompleted(
         context: ChannelHandlerContext,
         result: Result<ProducerElement, Error>
@@ -183,25 +183,25 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
         }
     }
 
-    @inlinable
+    
     func channelReadComplete(context: ChannelHandlerContext) {
         self._deliverReads(context: context)
         context.fireChannelReadComplete()
     }
 
-    @inlinable
+    
     func channelInactive(context: ChannelHandlerContext) {
         self._finishSource(context: context)
         context.fireChannelInactive()
     }
 
-    @inlinable
+    
     func errorCaught(context: ChannelHandlerContext, error: Error) {
         self._finishSource(with: error, context: context)
         context.fireErrorCaught(error)
     }
 
-    @inlinable
+    
     func read(context: ChannelHandlerContext) {
         switch self.producingState {
         case .keepProducing:
@@ -213,7 +213,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
         }
     }
 
-    @inlinable
+    
     func userInboundEventTriggered(context: ChannelHandlerContext, event: Any) {
         switch event {
         case ChannelEvent.inputClosed:
@@ -225,7 +225,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
         context.fireUserInboundEventTriggered(event)
     }
 
-    @inlinable
+    
     func _finishSource(with error: Error? = nil, context: ChannelHandlerContext) {
         guard let source = self.source else {
             return
@@ -244,7 +244,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
         self.source = nil
     }
 
-    @inlinable
+    
     func _deliverReads(context: ChannelHandlerContext) {
         if self.buffer.isEmpty {
             return
@@ -270,7 +270,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension NIOAsyncChannelInboundStreamChannelHandler {
-    @inlinable
+    
     func _didTerminate() {
         self.eventLoop.preconditionInEventLoop()
         self.source = nil
@@ -287,7 +287,7 @@ extension NIOAsyncChannelInboundStreamChannelHandler {
         }
     }
 
-    @inlinable
+    
     func _produceMore() {
         self.eventLoop.preconditionInEventLoop()
 
@@ -317,14 +317,14 @@ struct NIOAsyncChannelInboundStreamChannelHandlerProducerDelegate: @unchecked Se
     @usableFromInline
     let _produceMore: () -> Void
 
-    @inlinable
+    
     init<InboundIn, ProducerElement>(handler: NIOAsyncChannelInboundStreamChannelHandler<InboundIn, ProducerElement>) {
         self.eventLoop = handler.eventLoop
         self._didTerminate = handler._didTerminate
         self._produceMore = handler._produceMore
     }
 
-    @inlinable
+    
     func didTerminate() {
         if self.eventLoop.inEventLoop {
             self._didTerminate()
@@ -335,7 +335,7 @@ struct NIOAsyncChannelInboundStreamChannelHandlerProducerDelegate: @unchecked Se
         }
     }
 
-    @inlinable
+    
     func produceMore() {
         if self.eventLoop.inEventLoop {
             self._produceMore()

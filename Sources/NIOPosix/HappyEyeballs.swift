@@ -277,7 +277,7 @@ internal final class HappyEyeballsConnector<ChannelBuilderResult> {
     /// An object that holds any errors we encountered.
     private var error: NIOConnectionError
 
-    @inlinable
+    
     init(resolver: Resolver,
          loop: EventLoop,
          host: String,
@@ -307,7 +307,7 @@ internal final class HappyEyeballsConnector<ChannelBuilderResult> {
         self.connectionDelay = connectionDelay
     }
 
-    @inlinable
+    
     convenience init(
         resolver: Resolver,
         loop: EventLoop,
@@ -333,7 +333,7 @@ internal final class HappyEyeballsConnector<ChannelBuilderResult> {
     /// Initiate a DNS resolution attempt using Happy Eyeballs 2.
     ///
     /// returns: An `EventLoopFuture` that fires with a connected `Channel`.
-    @inlinable
+    
     func resolveAndConnect() -> EventLoopFuture<(Channel, ChannelBuilderResult)> {
         // We dispatch ourselves onto the event loop, rather than do all the rest of our processing from outside it.
         self.loop.execute {
@@ -346,7 +346,7 @@ internal final class HappyEyeballsConnector<ChannelBuilderResult> {
     /// Initiate a DNS resolution attempt using Happy Eyeballs 2.
     ///
     /// returns: An `EventLoopFuture` that fires with a connected `Channel`.
-    @inlinable
+    
     func resolveAndConnect() -> EventLoopFuture<Channel> where ChannelBuilderResult == Void {
         self.resolveAndConnect().map { $0.0 }
     }

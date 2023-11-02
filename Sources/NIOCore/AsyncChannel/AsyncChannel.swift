@@ -87,7 +87,7 @@ public struct NIOAsyncChannel<Inbound: Sendable, Outbound: Sendable>: Sendable {
     /// - Parameters:
     ///   - channel: The ``Channel`` to wrap.
     ///   - configuration: The ``NIOAsyncChannel``s configuration.
-    @inlinable
+    
     public init(
         synchronouslyWrapping channel: Channel,
         configuration: Configuration = .init()
@@ -110,7 +110,7 @@ public struct NIOAsyncChannel<Inbound: Sendable, Outbound: Sendable>: Sendable {
     /// - Parameters:
     ///   - channel: The ``Channel`` to wrap.
     ///   - configuration: The ``NIOAsyncChannel``s configuration.
-    @inlinable
+    
     public init(
         synchronouslyWrapping channel: Channel,
         configuration: Configuration = .init()
@@ -125,7 +125,7 @@ public struct NIOAsyncChannel<Inbound: Sendable, Outbound: Sendable>: Sendable {
         self.outbound.finish()
     }
 
-    @inlinable
+    
     internal init(
         channel: Channel,
         inboundStream: NIOAsyncChannelInboundStream<Inbound>,
@@ -142,7 +142,7 @@ public struct NIOAsyncChannel<Inbound: Sendable, Outbound: Sendable>: Sendable {
     /// at the right moment.
     ///
     /// - Important: This is not considered stable API and should not be used.
-    @inlinable
+    
     public static func _wrapAsyncChannelWithTransformations(
         synchronouslyWrapping channel: Channel,
         backPressureStrategy: NIOAsyncSequenceProducerBackPressureStrategies.HighLowWatermark? = nil,
@@ -168,7 +168,7 @@ public struct NIOAsyncChannel<Inbound: Sendable, Outbound: Sendable>: Sendable {
 
 extension Channel {
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     func _syncAddAsyncHandlers<Inbound: Sendable, Outbound: Sendable>(
         backPressureStrategy: NIOAsyncSequenceProducerBackPressureStrategies.HighLowWatermark?,
         isOutboundHalfClosureEnabled: Bool
@@ -189,7 +189,7 @@ extension Channel {
     }
 
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     func _syncAddAsyncHandlersWithTransformations<ChannelReadResult>(
         backPressureStrategy: NIOAsyncSequenceProducerBackPressureStrategies.HighLowWatermark?,
         isOutboundHalfClosureEnabled: Bool,

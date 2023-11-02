@@ -405,30 +405,30 @@ enum SelectorStrategy {
 @usableFromInline struct SelectorRegistrationID: Hashable {
     @usableFromInline var _rawValue: UInt32
 
-    @inlinable var rawValue: UInt32 {
+     var rawValue: UInt32 {
         return self._rawValue
     }
 
-    @inlinable static var initialRegistrationID: SelectorRegistrationID {
+     static var initialRegistrationID: SelectorRegistrationID {
         return SelectorRegistrationID(rawValue: .max)
     }
 
-    @inlinable mutating func nextRegistrationID() -> SelectorRegistrationID {
+     mutating func nextRegistrationID() -> SelectorRegistrationID {
         let current = self
         // Overflow is okay here, this is just for very short-term disambiguation
         self._rawValue = self._rawValue &+ 1
         return current
     }
 
-    @inlinable init(rawValue: UInt32) {
+     init(rawValue: UInt32) {
         self._rawValue = rawValue
     }
 
-    @inlinable static func ==(_ lhs: SelectorRegistrationID, _ rhs: SelectorRegistrationID) -> Bool {
+     static func ==(_ lhs: SelectorRegistrationID, _ rhs: SelectorRegistrationID) -> Bool {
         return lhs._rawValue == rhs._rawValue
     }
 
-    @inlinable func hash(into hasher: inout Hasher) {
+     func hash(into hasher: inout Hasher) {
         hasher.combine(self._rawValue)
     }
 }

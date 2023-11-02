@@ -323,7 +323,7 @@ extension NIOThreadPool {
 
     /// Shuts down the thread pool gracefully.
     @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-    @inlinable
+    
     public func shutdownGracefully() async throws {
         return try await withCheckedThrowingContinuation { cont in
             self.shutdownGracefully { error in

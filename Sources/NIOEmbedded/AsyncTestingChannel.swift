@@ -366,7 +366,7 @@ public final class NIOAsyncTestingChannel: Channel {
     /// - note: Outbound events travel the `ChannelPipeline` _back to front_.
     /// - note: ``NIOAsyncTestingChannel/writeOutbound(_:)`` will `write` data through the `ChannelPipeline`, starting with last
     ///         `ChannelHandler`.
-    @inlinable
+    
     public func readOutbound<T: Sendable>(as type: T.Type = T.self) async throws -> T? {
         try await self.testingEventLoop.executeInContext {
             try self._readFromBuffer(buffer: &self.channelcore.outboundBuffer)
@@ -416,7 +416,7 @@ public final class NIOAsyncTestingChannel: Channel {
     /// `ChannelHandlerContext.fireChannelRead`) or implicitly by not implementing `channelRead`.
     ///
     /// - note: ``NIOAsyncTestingChannel/writeInbound(_:)`` will fire data through the `ChannelPipeline` using `fireChannelRead`.
-    @inlinable
+    
     public func readInbound<T: Sendable>(as type: T.Type = T.self) async throws -> T? {
         try await self.testingEventLoop.executeInContext {
             try self._readFromBuffer(buffer: &self.channelcore.inboundBuffer)
@@ -463,7 +463,7 @@ public final class NIOAsyncTestingChannel: Channel {
     ///    - data: The data to fire through the pipeline.
     /// - returns: The state of the inbound buffer which contains all the events that travelled the `ChannelPipeline`
     //             all the way.
-    @inlinable
+    
     @discardableResult public func writeInbound<T: Sendable>(_ data: T) async throws -> BufferState {
         try await self.testingEventLoop.executeInContext {
             self.pipeline.fireChannelRead(NIOAny(data))
@@ -483,7 +483,7 @@ public final class NIOAsyncTestingChannel: Channel {
     ///    - data: The data to fire through the pipeline.
     /// - returns: The state of the outbound buffer which contains all the events that travelled the `ChannelPipeline`
     //             all the way.
-    @inlinable
+    
     @discardableResult public func writeOutbound<T: Sendable>(_ data: T) async throws -> BufferState {
         try await self.writeAndFlush(NIOAny(data))
 
@@ -511,7 +511,7 @@ public final class NIOAsyncTestingChannel: Channel {
     }
 
 
-    @inlinable
+    
     func _readFromBuffer<T>(buffer: inout CircularBuffer<NIOAny>) throws -> T? {
         self.testingEventLoop.preconditionInEventLoop()
 
@@ -521,7 +521,7 @@ public final class NIOAsyncTestingChannel: Channel {
         return try self._cast(buffer.removeFirst(), to: T.self)
     }
 
-    @inlinable
+    
     func _cast<T>(_ element: NIOAny, to: T.Type = T.self) throws -> T {
         guard let t = self._channelCore.tryUnwrapData(element, as: T.self) else {
             throw WrongTypeError(expected: T.self, actual: type(of: self._channelCore.tryUnwrapData(element, as: Any.self)!))
@@ -530,7 +530,7 @@ public final class NIOAsyncTestingChannel: Channel {
     }
 
     /// - see: `Channel.setOption`
-    @inlinable
+    
     public func setOption<Option: ChannelOption>(_ option: Option, value: Option.Value) -> EventLoopFuture<Void> {
         if self.eventLoop.inEventLoop {
             self.setOptionSync(option, value: value)
@@ -540,7 +540,7 @@ public final class NIOAsyncTestingChannel: Channel {
         }
     }
 
-    @inlinable
+    
     internal func setOptionSync<Option: ChannelOption>(_ option: Option, value: Option.Value) {
         if option is ChannelOptions.Types.AllowRemoteHalfClosureOption {
             self.allowRemoteHalfClosure = value as! Bool
@@ -551,7 +551,7 @@ public final class NIOAsyncTestingChannel: Channel {
     }
 
     /// - see: `Channel.getOption`
-    @inlinable
+    
     public func getOption<Option: ChannelOption>(_ option: Option) -> EventLoopFuture<Option.Value>  {
         if self.eventLoop.inEventLoop {
             return self.eventLoop.makeSucceededFuture(self.getOptionSync(option))
@@ -560,7 +560,7 @@ public final class NIOAsyncTestingChannel: Channel {
         }
     }
 
-    @inlinable
+    
     internal func getOptionSync<Option: ChannelOption>(_ option: Option) -> Option.Value {
         if option is ChannelOptions.Types.AutoReadOption {
             return true as! Option.Value
@@ -619,13 +619,13 @@ public final class NIOAsyncTestingChannel: Channel {
             self.channel = channel
         }
 
-        @inlinable
+        
         public func setOption<Option: ChannelOption>(_ option: Option, value: Option.Value) throws {
             self.channel.eventLoop.preconditionInEventLoop()
             self.channel.setOptionSync(option, value: value)
         }
 
-        @inlinable
+        
         public func getOption<Option: ChannelOption>(_ option: Option) throws -> Option.Value {
             self.channel.eventLoop.preconditionInEventLoop()
             return self.channel.getOptionSync(option)

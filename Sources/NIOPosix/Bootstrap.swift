@@ -188,7 +188,7 @@ public final class ServerBootstrap {
     /// - parameters:
     ///     - option: The option to be applied.
     ///     - value: The value for the option.
-    @inlinable
+    
     public func serverChannelOption<Option: ChannelOption>(_ option: Option, value: Option.Value) -> Self {
         self._serverChannelOptions.append(key: option, value: value)
         return self
@@ -199,7 +199,7 @@ public final class ServerBootstrap {
     /// - parameters:
     ///     - option: The option to be applied.
     ///     - value: The value for the option.
-    @inlinable
+    
     public func childChannelOption<Option: ChannelOption>(_ option: Option, value: Option.Value) -> Self {
         self._childChannelOptions.append(key: option, value: value)
         return self
@@ -823,7 +823,7 @@ public final class ClientBootstrap: NIOClientTCPBootstrapProtocol {
     /// - parameters:
     ///     - option: The option to be applied.
     ///     - value: The value for the option.
-    @inlinable
+    
     public func channelOption<Option: ChannelOption>(_ option: Option, value: Option.Value) -> Self {
         self._channelOptions.append(key: option, value: value)
         return self
@@ -1430,7 +1430,7 @@ public final class DatagramBootstrap {
     /// - parameters:
     ///     - option: The option to be applied.
     ///     - value: The value for the option.
-    @inlinable
+    
     public func channelOption<Option: ChannelOption>(_ option: Option, value: Option.Value) -> Self {
         self._channelOptions.append(key: option, value: value)
         return self
@@ -1977,7 +1977,7 @@ public final class NIOPipeBootstrap {
     /// - parameters:
     ///     - option: The option to be applied.
     ///     - value: The value for the option.
-    @inlinable
+    
     public func channelOption<Option: ChannelOption>(_ option: Option, value: Option.Value) -> Self {
         self._channelOptions.append(key: option, value: value)
         return self

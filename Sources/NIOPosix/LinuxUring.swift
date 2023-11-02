@@ -47,7 +47,7 @@ internal extension TimeAmount {
     @usableFromInline var eventType: CQEEventType
     @usableFromInline var padding: Int8 // reserved for future use
 
-    @inlinable init(registrationID: SelectorRegistrationID, fileDescriptor: CInt, eventType: CQEEventType) {
+     init(registrationID: SelectorRegistrationID, fileDescriptor: CInt, eventType: CQEEventType) {
         assert(MemoryLayout<UInt64>.size == MemoryLayout<URingUserData>.size)
         self.registrationID = UInt16(truncatingIfNeeded: registrationID.rawValue)
         self.fileDescriptor = fileDescriptor
@@ -55,7 +55,7 @@ internal extension TimeAmount {
         self.padding = 0
     }
 
-    @inlinable init(rawValue: UInt64) {
+     init(rawValue: UInt64) {
         let unpacked = IntegerBitPacking.unpackUInt32UInt16UInt8(rawValue)
         self = .init(registrationID: SelectorRegistrationID(rawValue: UInt32(unpacked.1)),
                      fileDescriptor: CInt(unpacked.0),

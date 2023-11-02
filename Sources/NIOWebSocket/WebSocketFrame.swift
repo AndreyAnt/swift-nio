@@ -77,7 +77,7 @@ extension WebSocketMaskingKey {
     /// - Parameter generator: The random number generator to use when creating the
     ///     new random masking key.
     /// - Returns: A random masking key
-    @inlinable
+    
     public static func random<Generator>(
         using generator: inout Generator
     ) -> WebSocketMaskingKey where Generator: RandomNumberGenerator {
@@ -86,7 +86,7 @@ extension WebSocketMaskingKey {
     
     /// Returns a random masking key, using the `SystemRandomNumberGenerator` as a source for randomness.
     /// - Returns: A random masking key
-    @inlinable
+    
     public static func random() -> WebSocketMaskingKey {
         var generator = SystemRandomNumberGenerator()
         return .random(using: &generator)
@@ -125,7 +125,7 @@ extension WebSocketMaskingKey: Collection {
         }
     }
 
-    @inlinable
+    
     public func withContiguousStorageIfAvailable<R>(_ body: (UnsafeBufferPointer<UInt8>) throws -> R) rethrows -> R? {
         return try withUnsafeBytes(of: self._key) { ptr in
             // this is boilerplate necessary to convert from UnsafeRawBufferPointer to UnsafeBufferPointer<UInt8>

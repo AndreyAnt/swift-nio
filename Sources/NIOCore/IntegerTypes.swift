@@ -21,7 +21,7 @@
 struct _UInt24: Sendable {
     @usableFromInline var _backing: (UInt16, UInt8)
 
-    @inlinable
+    
     init(_ value: UInt32) {
         assert(value & 0xff_00_00_00 == 0, "value \(value) too large for _UInt24")
         self._backing = IntegerBitPacking.unpackUInt16UInt8(value)
@@ -37,14 +37,14 @@ struct _UInt24: Sendable {
 }
 
 extension UInt32 {
-    @inlinable
+    
     init(_ value: _UInt24) {
         self = IntegerBitPacking.packUInt16UInt8(value._backing.0, value._backing.1)
     }
 }
 
 extension Int {
-    @inlinable
+    
     init(_ value: _UInt24) {
         self = Int(UInt32(value))
     }
@@ -52,7 +52,7 @@ extension Int {
 
 
 extension _UInt24: Equatable {
-    @inlinable
+    
     public static func ==(lhs: _UInt24, rhs: _UInt24) -> Bool {
         return lhs._backing == rhs._backing
     }
@@ -71,7 +71,7 @@ extension _UInt24: CustomStringConvertible {
 struct _UInt56: Sendable {
     @usableFromInline var _backing: (UInt32, UInt16, UInt8)
 
-    @inlinable init(_ value: UInt64) {
+     init(_ value: UInt64) {
         self._backing = IntegerBitPacking.unpackUInt32UInt16UInt8(value)
     }
 
@@ -103,7 +103,7 @@ extension Int {
 }
 
 extension _UInt56: Equatable {
-    @inlinable
+    
     public static func ==(lhs: _UInt56, rhs: _UInt56) -> Bool {
         return lhs._backing == rhs._backing
     }

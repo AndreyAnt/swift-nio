@@ -37,7 +37,7 @@ typealias LockPrimitive = pthread_mutex_t
 enum LockOperations { }
 
 extension LockOperations {
-    @inlinable
+    
     static func create(_ mutex: UnsafeMutablePointer<LockPrimitive>) {
         mutex.assertValidAlignment()
 
@@ -55,7 +55,7 @@ extension LockOperations {
 #endif
     }
     
-    @inlinable
+    
     static func destroy(_ mutex: UnsafeMutablePointer<LockPrimitive>) {
         mutex.assertValidAlignment()
 
@@ -67,7 +67,7 @@ extension LockOperations {
 #endif
     }
     
-    @inlinable
+    
     static func lock(_ mutex: UnsafeMutablePointer<LockPrimitive>) {
         mutex.assertValidAlignment()
 
@@ -79,7 +79,7 @@ extension LockOperations {
 #endif
     }
     
-    @inlinable
+    
     static func unlock(_ mutex: UnsafeMutablePointer<LockPrimitive>) {
         mutex.assertValidAlignment()
 
@@ -123,7 +123,7 @@ extension LockOperations {
 @usableFromInline
 final class LockStorage<Value>: ManagedBuffer<Value, LockPrimitive> {
     
-    @inlinable
+    
     static func create(value: Value) -> Self {
         let buffer = Self.create(minimumCapacity: 1) { _ in
             return value
@@ -137,35 +137,35 @@ final class LockStorage<Value>: ManagedBuffer<Value, LockPrimitive> {
         return storage
     }
     
-    @inlinable
+    
     func lock() {
         self.withUnsafeMutablePointerToElements { lockPtr in
             LockOperations.lock(lockPtr)
         }
     }
     
-    @inlinable
+    
     func unlock() {
         self.withUnsafeMutablePointerToElements { lockPtr in
             LockOperations.unlock(lockPtr)
         }
     }
     
-    @inlinable
+    
     deinit {
         self.withUnsafeMutablePointerToElements { lockPtr in
             LockOperations.destroy(lockPtr)
         }
     }
     
-    @inlinable
+    
     func withLockPrimitive<T>(_ body: (UnsafeMutablePointer<LockPrimitive>) throws -> T) rethrows -> T {
         try self.withUnsafeMutablePointerToElements { lockPtr in
             return try body(lockPtr)
         }
     }
     
-    @inlinable
+    
     func withLockedValue<T>(_ mutate: (inout Value) throws -> T) rethrows -> T {
         try self.withUnsafeMutablePointers { valuePtr, lockPtr in
             LockOperations.lock(lockPtr)
@@ -190,7 +190,7 @@ public struct NIOLock {
     internal let _storage: LockStorage<Void>
     
     /// Create a new lock.
-    @inlinable
+    
     public init() {
         self._storage = .create(value: ())
     }
@@ -199,7 +199,7 @@ public struct NIOLock {
     ///
     /// Whenever possible, consider using `withLock` instead of this method and
     /// `unlock`, to simplify lock handling.
-    @inlinable
+    
     public func lock() {
         self._storage.lock()
     }
@@ -208,12 +208,12 @@ public struct NIOLock {
     ///
     /// Whenever possible, consider using `withLock` instead of this method and
     /// `lock`, to simplify lock handling.
-    @inlinable
+    
     public func unlock() {
         self._storage.unlock()
     }
 
-    @inlinable
+    
     internal func withLockPrimitive<T>(_ body: (UnsafeMutablePointer<LockPrimitive>) throws -> T) rethrows -> T {
         return try self._storage.withLockPrimitive(body)
     }
@@ -228,7 +228,7 @@ extension NIOLock {
     ///
     /// - Parameter body: The block to execute while holding the lock.
     /// - Returns: The value returned by the block.
-    @inlinable
+    
     public func withLock<T>(_ body: () throws -> T) rethrows -> T {
         self.lock()
         defer {
@@ -237,7 +237,7 @@ extension NIOLock {
         return try body()
     }
 
-    @inlinable
+    
     public func withLockVoid(_ body: () throws -> Void) rethrows -> Void {
         try self.withLock(body)
     }
@@ -246,7 +246,7 @@ extension NIOLock {
 extension NIOLock: Sendable {}
 
 extension UnsafeMutablePointer {
-    @inlinable
+    
     func assertValidAlignment() {
         assert(UInt(bitPattern: self) % UInt(MemoryLayout<Pointee>.alignment) == 0)
     }

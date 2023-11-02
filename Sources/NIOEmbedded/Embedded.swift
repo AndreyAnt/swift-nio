@@ -690,7 +690,7 @@ public final class EmbeddedChannel: Channel {
     /// - note: Outbound events travel the `ChannelPipeline` _back to front_.
     /// - note: `EmbeddedChannel.writeOutbound` will `write` data through the `ChannelPipeline`, starting with last
     ///         `ChannelHandler`.
-    @inlinable
+    
     public func readOutbound<T>(as type: T.Type = T.self) throws -> T? {
         return try _readFromBuffer(buffer: &channelcore.outboundBuffer)
     }
@@ -705,7 +705,7 @@ public final class EmbeddedChannel: Channel {
     /// `ChannelHandlerContext.fireChannelRead`) or implicitly by not implementing `channelRead`.
     ///
     /// - note: `EmbeddedChannel.writeInbound` will fire data through the `ChannelPipeline` using `fireChannelRead`.
-    @inlinable
+    
     public func readInbound<T>(as type: T.Type = T.self) throws -> T? {
         return try _readFromBuffer(buffer: &channelcore.inboundBuffer)
     }
@@ -719,7 +719,7 @@ public final class EmbeddedChannel: Channel {
     ///    - data: The data to fire through the pipeline.
     /// - returns: The state of the inbound buffer which contains all the events that travelled the `ChannelPipeline`
     //             all the way.
-    @inlinable
+    
     @discardableResult public func writeInbound<T>(_ data: T) throws -> BufferState {
         pipeline.fireChannelRead(NIOAny(data))
         pipeline.fireChannelReadComplete()
@@ -737,7 +737,7 @@ public final class EmbeddedChannel: Channel {
     ///    - data: The data to fire through the pipeline.
     /// - returns: The state of the outbound buffer which contains all the events that travelled the `ChannelPipeline`
     //             all the way.
-    @inlinable
+    
     @discardableResult public func writeOutbound<T>(_ data: T) throws -> BufferState {
         try writeAndFlush(NIOAny(data)).wait()
         return self.channelcore.outboundBuffer.isEmpty ? .empty : .full(Array(self.channelcore.outboundBuffer))
@@ -753,7 +753,7 @@ public final class EmbeddedChannel: Channel {
         }
     }
 
-    @inlinable
+    
     func _readFromBuffer<T>(buffer: inout CircularBuffer<NIOAny>) throws -> T? {
         if buffer.isEmpty {
             return nil
@@ -795,13 +795,13 @@ public final class EmbeddedChannel: Channel {
     }
 
     /// - see: `Channel.setOption`
-    @inlinable
+    
     public func setOption<Option: ChannelOption>(_ option: Option, value: Option.Value) -> EventLoopFuture<Void> {
         self.setOptionSync(option, value: value)
         return self.eventLoop.makeSucceededVoidFuture()
     }
 
-    @inlinable
+    
     internal func setOptionSync<Option: ChannelOption>(_ option: Option, value: Option.Value) {
         if option is ChannelOptions.Types.AllowRemoteHalfClosureOption {
             self.allowRemoteHalfClosure = value as! Bool
@@ -812,12 +812,12 @@ public final class EmbeddedChannel: Channel {
     }
 
     /// - see: `Channel.getOption`
-    @inlinable
+    
     public func getOption<Option: ChannelOption>(_ option: Option) -> EventLoopFuture<Option.Value>  {
         return self.eventLoop.makeSucceededFuture(self.getOptionSync(option))
     }
 
-    @inlinable
+    
     internal func getOptionSync<Option: ChannelOption>(_ option: Option) -> Option.Value {
         if option is ChannelOptions.Types.AutoReadOption {
             return true as! Option.Value
@@ -866,12 +866,12 @@ extension EmbeddedChannel {
             self.channel = channel
         }
 
-        @inlinable
+        
         public func setOption<Option: ChannelOption>(_ option: Option, value: Option.Value) throws {
             self.channel.setOptionSync(option, value: value)
         }
 
-        @inlinable
+        
         public func getOption<Option: ChannelOption>(_ option: Option) throws -> Option.Value {
             return self.channel.getOptionSync(option)
         }

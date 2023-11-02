@@ -373,7 +373,7 @@ extension ChannelOptions {
         /// - parameters:
         ///    - key: the key for the option
         ///    - value: the value for the option
-        @inlinable
+        
         public mutating func append<Option: ChannelOption>(key newKey: Option, value newValue: Option.Value) {
             func applier(_ t: Channel) -> (Any, Any) -> EventLoopFuture<Void> {
                 return { (option, value) in

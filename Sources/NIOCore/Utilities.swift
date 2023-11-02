@@ -45,7 +45,7 @@ import Darwin
 ///
 /// This is currently the only way to do this in Swift: see
 /// https://forums.swift.org/t/support-debug-only-code/11037 for a discussion.
-@inlinable
+
 internal func debugOnly(_ body: () -> Void) {
     // FIXME: duplicated with NIO.
     assert({ body(); return true }())

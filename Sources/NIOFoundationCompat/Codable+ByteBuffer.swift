@@ -24,7 +24,7 @@ extension ByteBuffer {
     ///    - index: The index of the first byte to decode.
     ///    - length: The number of bytes to decode.
     /// - returns: The decoded value if successful or `nil` if there are not enough readable bytes available.
-    @inlinable
+    
     public func getJSONDecodable<T: Decodable>(_ type: T.Type,
                                                decoder: JSONDecoder = JSONDecoder(),
                                                at index: Int, length: Int) throws -> T? {
@@ -41,7 +41,7 @@ extension ByteBuffer {
     ///    - decoder: The `JSONDecoder` that is used for the decoding.
     ///    - length: The number of bytes to decode.
     /// - returns: The decoded value is successful or `nil` if there are not enough readable bytes available.
-    @inlinable
+    
     public mutating func readJSONDecodable<T: Decodable>(_ type: T.Type,
                                                          decoder: JSONDecoder = JSONDecoder(),
                                                          length: Int) throws -> T? {
@@ -64,7 +64,7 @@ extension ByteBuffer {
     ///     - value: An `Encodable` value to encode.
     ///     - encoder: The `JSONEncoder` to encode `value` with.
     /// - returns: The number of bytes written.
-    @inlinable
+    
     @discardableResult
     public mutating func setJSONEncodable<T: Encodable>(_ value: T,
                                                         encoder: JSONEncoder = JSONEncoder(),
@@ -81,7 +81,7 @@ extension ByteBuffer {
     ///     - value: An `Encodable` value to encode.
     ///     - encoder: The `JSONEncoder` to encode `value` with.
     /// - returns: The number of bytes written.
-    @inlinable
+    
     @discardableResult
     public mutating func writeJSONEncodable<T: Encodable>(_ value: T,
                                                           encoder: JSONEncoder = JSONEncoder()) throws -> Int {

@@ -260,7 +260,7 @@ extension ChannelCore {
     ///     - data: The `NIOAny` to unwrap.
     ///     - as: The type to extract from the `NIOAny`.
     /// - returns: The content of the `NIOAny`.
-    @inlinable
+    
     public func unwrapData<T>(_ data: NIOAny, as: T.Type = T.self) -> T {
         return data.forceAs()
     }
@@ -282,7 +282,7 @@ extension ChannelCore {
     /// - returns: The content of the `NIOAny`, or `nil` if the type is incorrect.
     /// - warning: If you are implementing a `ChannelCore`, you should use `unwrapData` unless you
     ///     are doing something _extremely_ unusual.
-    @inlinable
+    
     public func tryUnwrapData<T>(_ data: NIOAny, as: T.Type = T.self) -> T? {
         return data.tryAs()
     }

@@ -103,20 +103,20 @@ extension SelectorEventSet {
     @usableFromInline var registrationID: SelectorRegistrationID
     @usableFromInline var fileDescriptor: CInt
 
-    @inlinable init(registrationID: SelectorRegistrationID, fileDescriptor: CInt) {
+     init(registrationID: SelectorRegistrationID, fileDescriptor: CInt) {
         assert(MemoryLayout<UInt64>.size == MemoryLayout<EPollUserData>.size)
         self.registrationID = registrationID
         self.fileDescriptor = fileDescriptor
     }
 
-    @inlinable init(rawValue: UInt64) {
+     init(rawValue: UInt64) {
         let unpacked = IntegerBitPacking.unpackUInt32CInt(rawValue)
         self = .init(registrationID: SelectorRegistrationID(rawValue: unpacked.0), fileDescriptor: unpacked.1)
     }
 }
 
 extension UInt64 {
-    @inlinable
+    
     init(_ epollUserData: EPollUserData) {
         let fd = epollUserData.fileDescriptor
         assert(fd >= 0, "\(fd) is not a valid file descriptor")

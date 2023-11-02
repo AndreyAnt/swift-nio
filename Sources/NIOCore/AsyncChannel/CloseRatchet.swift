@@ -26,7 +26,7 @@ final class CloseRatchet {
         case writeClosed
         case bothClosed
 
-        @inlinable
+        
         mutating func closeRead() -> CloseReadAction {
             switch self {
             case .notClosed:
@@ -40,7 +40,7 @@ final class CloseRatchet {
             }
         }
 
-        @inlinable
+        
         mutating func closeWrite() -> CloseWriteAction {
             switch self {
             case .notClosed(let isOutboundHalfClosureEnabled):
@@ -63,7 +63,7 @@ final class CloseRatchet {
     @usableFromInline
     var _state: State
 
-    @inlinable
+    
     init(isOutboundHalfClosureEnabled: Bool) {
         self._state = .notClosed(isOutboundHalfClosureEnabled: isOutboundHalfClosureEnabled)
     }
@@ -74,7 +74,7 @@ final class CloseRatchet {
         case close
     }
 
-    @inlinable
+    
     func closeRead() -> CloseReadAction {
         return self._state.closeRead()
     }
@@ -86,7 +86,7 @@ final class CloseRatchet {
         case closeOutput
     }
 
-    @inlinable
+    
     func closeWrite() -> CloseWriteAction {
         return self._state.closeWrite()
     }

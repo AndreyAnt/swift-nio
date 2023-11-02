@@ -18,12 +18,12 @@
 public extension String {
 
     /// Base64 encode a collection of UInt8 to a string, without the use of Foundation.
-    @inlinable
+    
     init<Buffer: Collection>(base64Encoding bytes: Buffer) where Buffer.Element == UInt8 {
         self = Base64.encode(bytes: bytes)
     }
 
-    @inlinable
+    
     func base64Decoded() throws -> [UInt8] {
         return try Base64.decode(string: self)
     }
@@ -37,7 +37,7 @@ public enum Base64Error: Error {
 @usableFromInline
 internal struct Base64 {
 
-    @inlinable
+    
     static func encode<Buffer: Collection>(bytes: Buffer) -> String where Buffer.Element == UInt8 {
         guard !bytes.isEmpty else {
             return ""
@@ -65,7 +65,7 @@ internal struct Base64 {
         }
     }
 
-    @inlinable
+    
     static func decode(string: String) throws -> [UInt8] {
         guard string.count % 4 == 0 else {
             throw Base64Error.invalidLength
@@ -178,7 +178,7 @@ extension String {
     /// This is a backport of a proposed String initializer that will allow writing directly into an uninitialized String's backing memory.
     ///
     /// As this API does not exist prior to 5.3 on Linux, or on older Apple platforms, we fake it out with a pointer and accept the extra copy.
-    @inlinable
+    
     init(backportUnsafeUninitializedCapacity capacity: Int,
          initializingUTF8With initializer: (_ buffer: UnsafeMutableBufferPointer<UInt8>) throws -> Int) rethrows {
 
@@ -204,7 +204,7 @@ extension String {
 // enhancement on Apple platforms.
 extension String {
 
-    @inlinable
+    
     init(customUnsafeUninitializedCapacity capacity: Int,
          initializingUTF8With initializer: (_ buffer: UnsafeMutableBufferPointer<UInt8>) throws -> Int) rethrows {
         if #available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *) {

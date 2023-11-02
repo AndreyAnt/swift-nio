@@ -19,7 +19,7 @@ import _NIODataStructures
 import Atomics
 
 /// Execute the given closure and ensure we release all auto pools if needed.
-@inlinable
+
 internal func withAutoReleasePool<T>(_ execute: () throws -> T) rethrows -> T {
 #if canImport(Darwin)
     return try autoreleasepool {
@@ -250,7 +250,7 @@ Further information:
     }
 
     /// - see: `EventLoop.scheduleTask(deadline:_:)`
-    @inlinable
+    
     internal func scheduleTask<T>(deadline: NIODeadline, _ task: @escaping () throws -> T) -> Scheduled<T> {
         let promise: EventLoopPromise<T> = self.makePromise()
         let task = ScheduledTask(id: self.scheduledTaskCounter.loadThenWrappingIncrement(ordering: .relaxed), {
@@ -285,13 +285,13 @@ Further information:
     }
 
     /// - see: `EventLoop.scheduleTask(in:_:)`
-    @inlinable
+    
     internal func scheduleTask<T>(in: TimeAmount, _ task: @escaping () throws -> T) -> Scheduled<T> {
         return scheduleTask(deadline: .now() + `in`, task)
     }
 
     // - see: `EventLoop.execute`
-    @inlinable
+    
     internal func execute(_ task: @escaping () -> Void) {
         // nothing we can do if we fail enqueuing here.
         try? self._schedule0(ScheduledTask(id: self.scheduledTaskCounter.loadThenWrappingIncrement(ordering: .relaxed), task, { error in
@@ -655,7 +655,7 @@ Further information:
         }
     }
 
-    @inlinable
+    
     public func makeSucceededVoidFuture() -> EventLoopFuture<Void> {
         guard self.inEventLoop, let voidFuture = self._succeededVoidFuture else {
             // We have to create the promise and complete it because otherwise we'll hit a loop in `makeSucceededFuture`. This is
@@ -667,7 +667,7 @@ Further information:
         return voidFuture
     }
 
-    @inlinable
+    
     internal func parentGroupCallableFromThisEventLoopOnly() -> MultiThreadedEventLoopGroup? {
         self.assertInEventLoop()
         return self._parentGroup

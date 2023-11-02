@@ -21,13 +21,13 @@
 // checked arithmetic. This expense forces them to often be outlined, reducing the ability to optimise out
 // further preconditions and branches.
 extension UnsafeRawBufferPointer {
-    @inlinable
+    
     init(fastRebase slice: Slice<UnsafeRawBufferPointer>) {
         let base = slice.base.baseAddress?.advanced(by: slice.startIndex)
         self.init(start: base, count: slice.endIndex &- slice.startIndex)
     }
 
-    @inlinable
+    
     init(fastRebase slice: Slice<UnsafeMutableRawBufferPointer>) {
         let base = slice.base.baseAddress?.advanced(by: slice.startIndex)
         self.init(start: base, count: slice.endIndex &- slice.startIndex)
@@ -35,7 +35,7 @@ extension UnsafeRawBufferPointer {
 }
 
 extension UnsafeMutableRawBufferPointer {
-    @inlinable
+    
     init(fastRebase slice: Slice<UnsafeMutableRawBufferPointer>) {
         let base = slice.base.baseAddress?.advanced(by: slice.startIndex)
         self.init(start: base, count: slice.endIndex &- slice.startIndex)

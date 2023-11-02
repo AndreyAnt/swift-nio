@@ -27,13 +27,13 @@ public struct NIOLockedValueBox<Value> {
     internal let _storage: LockStorage<Value>
 
     /// Initialize the `Value`.
-    @inlinable
+    
     public init(_ value: Value) {
         self._storage = .create(value: value)
     }
 
     /// Access the `Value`, allowing mutation of it.
-    @inlinable
+    
     public func withLockedValue<T>(_ mutate: (inout Value) throws -> T) rethrows -> T {
         return try self._storage.withLockedValue(mutate)
     }

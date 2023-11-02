@@ -34,7 +34,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         case failPromise
     }
 
-    @inlinable
+    
     mutating func handlerRemoved() -> HandlerRemovedAction? {
         switch self.state {
         case .initial, .waitingForUser, .unbuffering:
@@ -51,7 +51,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         case invokeUserClosure(ALPNResult)
     }
 
-    @inlinable
+    
     mutating func userInboundEventTriggered(event: Any) -> UserInboundEventTriggeredAction {
         if case .handshakeCompleted(let negotiated) = event as? TLSUserEvent  {
             switch self.state {
@@ -76,7 +76,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         case fireChannelRead
     }
 
-    @inlinable
+    
     mutating func channelRead(data: NIOAny) -> ChannelReadAction? {
         switch self.state {
         case .initial, .finished:
@@ -104,7 +104,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         case removeHandler(NegotiationResult)
     }
 
-    @inlinable
+    
     mutating func userFutureCompleted(with result: Result<NegotiationResult, Error>) -> UserFutureCompletedAction? {
         switch self.state {
         case .initial:
@@ -147,7 +147,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         case fireChannelReadCompleteAndRemoveHandler
     }
 
-    @inlinable
+    
     mutating func unbuffer() -> UnbufferAction {
         switch self.state {
         case .initial, .waitingForUser, .finished:
@@ -166,7 +166,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         }
     }
 
-    @inlinable
+    
     mutating func channelInactive() {
         switch self.state {
         case .initial, .unbuffering, .waitingForUser:

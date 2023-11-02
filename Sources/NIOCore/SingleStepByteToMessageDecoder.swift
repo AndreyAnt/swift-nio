@@ -205,13 +205,13 @@ public final class NIOSingleStepByteToMessageProcessor<Decoder: NIOSingleStepByt
     /// - parameters:
     ///     - decoder: The `NIOSingleStepByteToMessageDecoder` to decode the bytes into message.
     ///     - maximumBufferSize: The maximum number of bytes to aggregate in-memory.
-    @inlinable
+    
     public init(_ decoder: Decoder, maximumBufferSize: Int? = nil) {
         self.decoder = decoder
         self.maximumBufferSize = maximumBufferSize
     }
 
-    @inlinable
+    
     func _append(_ buffer: ByteBuffer) {
         if self._buffer == nil || self._buffer!.readableBytes == 0 {
             self._buffer = buffer
@@ -221,7 +221,7 @@ public final class NIOSingleStepByteToMessageProcessor<Decoder: NIOSingleStepByt
         }
     }
 
-    @inlinable
+    
     func _withNonCoWBuffer(_ body: (inout ByteBuffer) throws -> Decoder.InboundOut?) throws -> Decoder.InboundOut? {
         guard var buffer = self._buffer else {
             return nil
@@ -237,7 +237,7 @@ public final class NIOSingleStepByteToMessageProcessor<Decoder: NIOSingleStepByt
         return result
     }
 
-    @inlinable
+    
     func _decodeLoop(decodeMode: DecodeMode, seenEOF: Bool = false, _ messageReceiver: (Decoder.InboundOut) throws -> Void) throws {
         // we want to call decodeLast once with an empty buffer if we have nothing
         if decodeMode == .last && (self._buffer == nil || self._buffer!.readableBytes == 0) {
@@ -290,7 +290,7 @@ extension NIOSingleStepByteToMessageProcessor {
     /// - parameters:
     ///     - buffer: The `ByteBuffer` containing the next data in the stream
     ///     - messageReceiver: A closure called for each message produced by the `Decoder`
-    @inlinable
+    
     public func process(buffer: ByteBuffer, _ messageReceiver: (Decoder.InboundOut) throws -> Void) throws {
         self._append(buffer)
         try self._decodeLoop(decodeMode: .normal, messageReceiver)
@@ -302,7 +302,7 @@ extension NIOSingleStepByteToMessageProcessor {
     /// - parameters:
     ///     - seenEOF: Whether an EOF was seen on the stream.
     ///     - messageReceiver: A closure called for each message produced by the `Decoder`.
-    @inlinable
+    
     public func finishProcessing(seenEOF: Bool, _ messageReceiver: (Decoder.InboundOut) throws -> Void) throws {
         try self._decodeLoop(decodeMode: .last, seenEOF: seenEOF, messageReceiver)
     }

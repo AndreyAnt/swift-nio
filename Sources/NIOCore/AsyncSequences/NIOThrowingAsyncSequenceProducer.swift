@@ -66,12 +66,12 @@ public struct NIOThrowingAsyncSequenceProducer<
         @usableFromInline
         internal let _storage: Storage
 
-        @inlinable
+        
         init(storage: Storage) {
             self._storage = storage
         }
 
-        @inlinable
+        
         deinit {
             _storage.sequenceDeinitialized()
         }
@@ -99,7 +99,7 @@ public struct NIOThrowingAsyncSequenceProducer<
     ///   - delegate: The delegate of the sequence
     /// - Returns: A ``NIOThrowingAsyncSequenceProducer/Source`` and a ``NIOThrowingAsyncSequenceProducer``.
     @available(*, deprecated, message: "Support for a generic Failure type is deprecated. Failure type must be `any Swift.Error`.")
-    @inlinable
+    
     public static func makeSequence(
         elementType: Element.Type = Element.self,
         failureType: Failure.Type = Failure.self,
@@ -128,7 +128,7 @@ public struct NIOThrowingAsyncSequenceProducer<
     ///   - backPressureStrategy: The back-pressure strategy of the sequence.
     ///   - delegate: The delegate of the sequence
     /// - Returns: A ``NIOThrowingAsyncSequenceProducer/Source`` and a ``NIOThrowingAsyncSequenceProducer``.
-    @inlinable
+    
     public static func makeSequence(
         elementType: Element.Type = Element.self,
         failureType: Failure.Type = Error.self,
@@ -145,7 +145,7 @@ public struct NIOThrowingAsyncSequenceProducer<
     }
 
     /// only used internally by``NIOAsyncSequenceProducer`` to reuse most of the code
-    @inlinable
+    
     internal static func makeNonThrowingSequence(
         elementType: Element.Type = Element.self,
         backPressureStrategy: Strategy,
@@ -160,7 +160,7 @@ public struct NIOThrowingAsyncSequenceProducer<
         return .init(source: source, sequence: sequence)
     }
 
-    @inlinable
+    
     /* private */ internal init(
         backPressureStrategy: Strategy,
         delegate: Delegate
@@ -196,12 +196,12 @@ extension NIOThrowingAsyncSequenceProducer {
                 self._storage.iteratorInitialized()
             }
 
-            @inlinable
+            
             deinit {
                 self._storage.iteratorDeinitialized()
             }
 
-            @inlinable
+            
             /* fileprivate */ internal func next() async throws -> Element? {
                 try await self._storage.next()
             }
@@ -214,7 +214,7 @@ extension NIOThrowingAsyncSequenceProducer {
             self._internalClass = InternalClass(storage: storage)
         }
 
-        @inlinable
+        
         public func next() async throws -> Element? {
             try await self._internalClass.next()
         }
@@ -238,12 +238,12 @@ extension NIOThrowingAsyncSequenceProducer {
             @usableFromInline
             internal let _storage: Storage
 
-            @inlinable
+            
             init(storage: Storage) {
                 self._storage = storage
             }
 
-            @inlinable
+            
             deinit {
                 // We need to call finish here to resume any suspended continuation.
                 self._storage.finish(nil)
@@ -287,7 +287,7 @@ extension NIOThrowingAsyncSequenceProducer {
         /// - Parameter contentsOf: The sequence to yield.
         /// - Returns: A ``NIOThrowingAsyncSequenceProducer/Source/YieldResult`` that indicates if the yield was successful
         /// and if more elements should be produced.
-        @inlinable
+        
         public func yield<S: Sequence>(contentsOf sequence: S) -> YieldResult where S.Element == Element {
             self._storage.yield(sequence)
         }
@@ -306,7 +306,7 @@ extension NIOThrowingAsyncSequenceProducer {
         /// - Parameter element: The element to yield.
         /// - Returns: A ``NIOThrowingAsyncSequenceProducer/Source/YieldResult`` that indicates if the yield was successful
         /// and if more elements should be produced.
-        @inlinable
+        
         public func yield(_ element: Element) -> YieldResult {
             self.yield(contentsOf: CollectionOfOne(element))
         }
@@ -320,7 +320,7 @@ extension NIOThrowingAsyncSequenceProducer {
         /// Otherwise, the buffered elements will be dropped.
         ///
         /// - Note: Calling this function more than once has no effect.
-        @inlinable
+        
         public func finish() {
             self._storage.finish(nil)
         }
@@ -335,7 +335,7 @@ extension NIOThrowingAsyncSequenceProducer {
         ///
         /// - Note: Calling this function more than once has no effect.
         /// - Parameter failure: The failure why the sequence finished.
-        @inlinable
+        
         public func finish(_ failure: Failure) {
             self._storage.finish(failure)
         }
@@ -366,7 +366,7 @@ extension NIOThrowingAsyncSequenceProducer {
             self._delegate = delegate
         }
 
-        @inlinable
+        
         /* fileprivate */ internal func sequenceDeinitialized() {
             let delegate: Delegate? = self._lock.withLock {
                 let action = self._stateMachine.sequenceDeinitialized()
@@ -385,14 +385,14 @@ extension NIOThrowingAsyncSequenceProducer {
             delegate?.didTerminate()
         }
 
-        @inlinable
+        
         /* fileprivate */ internal func iteratorInitialized() {
             self._lock.withLock {
                 self._stateMachine.iteratorInitialized()
             }
         }
 
-        @inlinable
+        
         /* fileprivate */ internal func iteratorDeinitialized() {
             let delegate: Delegate? = self._lock.withLock {
                 let action = self._stateMachine.iteratorDeinitialized()
@@ -412,7 +412,7 @@ extension NIOThrowingAsyncSequenceProducer {
             delegate?.didTerminate()
         }
 
-        @inlinable
+        
         /* fileprivate */ internal func yield<S: Sequence>(_ sequence: S) -> Source.YieldResult where S.Element == Element {
             // We must not resume the continuation while holding the lock
             // because it can deadlock in combination with the underlying ulock
@@ -443,7 +443,7 @@ extension NIOThrowingAsyncSequenceProducer {
             }
         }
 
-        @inlinable
+        
         /* fileprivate */ internal func finish(_ failure: Failure?) {
             // We must not resume the continuation while holding the lock
             // because it can deadlock in combination with the underlying ulock
@@ -478,7 +478,7 @@ extension NIOThrowingAsyncSequenceProducer {
             delegate?.didTerminate()
         }
 
-        @inlinable
+        
         /* fileprivate */ internal func next() async throws -> Element? {
             try await withTaskCancellationHandler {
                 self._lock.lock()
@@ -521,7 +521,7 @@ extension NIOThrowingAsyncSequenceProducer {
                     // In addition, we use `NIOThrowingAsyncSequenceProducer` in the implementation of the
                     // non-throwing variant `NIOAsyncSequenceProducer` where `Failure` will be `Never` and
                     // this cast will fail as well.
-                    // Everything is marked @inlinable and the Failure type is known at compile time,
+                    // Everything is marked  and the Failure type is known at compile time,
                     // therefore this cast should be optimised away in release build.
                     if let error = CancellationError() as? Failure {
                         throw error
@@ -586,7 +586,7 @@ extension NIOThrowingAsyncSequenceProducer {
                     // In addition, we use `NIOThrowingAsyncSequenceProducer` in the implementation of the
                     // non-throwing variant `NIOAsyncSequenceProducer` where `Failure` will be `Never` and
                     // this cast will fail as well.
-                    // Everything is marked @inlinable and the Failure type is known at compile time,
+                    // Everything is marked  and the Failure type is known at compile time,
                     // therefore this cast should be optimised away in release build.
                     if let failure = CancellationError() as? Failure {
                         continuation.resume(throwing: failure)
@@ -654,7 +654,7 @@ extension NIOThrowingAsyncSequenceProducer {
         /// it is a customizable extension of the state machine.
         ///
         /// - Parameter backPressureStrategy: The back-pressure strategy.
-        @inlinable
+        
         init(backPressureStrategy: Strategy) {
             self._state = .initial(
                 backPressureStrategy: backPressureStrategy,
@@ -671,7 +671,7 @@ extension NIOThrowingAsyncSequenceProducer {
             case none
         }
 
-        @inlinable
+        
         mutating func sequenceDeinitialized() -> SequenceDeinitializedAction {
             switch self._state {
             case .initial(_, iteratorInitialized: false),
@@ -701,7 +701,7 @@ extension NIOThrowingAsyncSequenceProducer {
             }
         }
 
-        @inlinable
+        
         mutating func iteratorInitialized() {
             switch self._state {
             case .initial(_, iteratorInitialized: true),
@@ -761,7 +761,7 @@ extension NIOThrowingAsyncSequenceProducer {
             case none
         }
 
-        @inlinable
+        
         mutating func iteratorDeinitialized() -> IteratorDeinitializedAction {
             switch self._state {
             case .initial(_, iteratorInitialized: false),
@@ -837,7 +837,7 @@ extension NIOThrowingAsyncSequenceProducer {
             }
         }
 
-        @inlinable
+        
         mutating func yield<S: Sequence>(_ sequence: S) -> YieldAction where S.Element == Element {
             switch self._state {
             case .initial(var backPressureStrategy, let iteratorInitialized):
@@ -921,7 +921,7 @@ extension NIOThrowingAsyncSequenceProducer {
             case none
         }
 
-        @inlinable
+        
         mutating func finish(_ failure: Failure?) -> FinishAction {
             switch self._state {
             case .initial(_, let iteratorInitialized):
@@ -975,7 +975,7 @@ extension NIOThrowingAsyncSequenceProducer {
             case none
         }
 
-        @inlinable
+        
         mutating func cancelled() -> CancelledAction {
             switch self._state {
             case .initial(_, let iteratorInitialized):
@@ -987,7 +987,7 @@ extension NIOThrowingAsyncSequenceProducer {
                 // In addition, we use `NIOThrowingAsyncSequenceProducer` in the implementation of the
                 // non-throwing variant `NIOAsyncSequenceProducer` where `Failure` will be `Never` and
                 // this cast will fail as well.
-                // Everything is marked @inlinable and the Failure type is known at compile time,
+                // Everything is marked  and the Failure type is known at compile time,
                 // therefore this cast should be optimised away in release build.
                 if let failure = CancellationError() as? Failure {
                     self._state = .sourceFinished(
@@ -1044,7 +1044,7 @@ extension NIOThrowingAsyncSequenceProducer {
             case suspendTask
         }
 
-        @inlinable
+        
         mutating func next() -> NextAction {
             switch self._state {
             case .initial(let backPressureStrategy, let iteratorInitialized):
@@ -1142,7 +1142,7 @@ extension NIOThrowingAsyncSequenceProducer {
             case none
         }
 
-        @inlinable
+        
         mutating func next(for continuation: CheckedContinuation<Element?, Error>) -> NextForContinuationAction {
             switch self._state {
             case .initial:

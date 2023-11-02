@@ -25,7 +25,7 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
         @usableFromInline
         internal let continuation: AsyncThrowingStream<Inbound, Error>.Continuation
 
-        @inlinable
+        
         init(continuation: AsyncThrowingStream<Inbound, Error>.Continuation) {
             self.continuation = continuation
         }
@@ -33,7 +33,7 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
         /// Yields the element to the inbound stream.
         ///
         /// - Parameter element: The element to yield to the inbound stream.
-        @inlinable
+        
         public func yield(_ element: Inbound) {
             self.continuation.yield(element)
         }
@@ -41,7 +41,7 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
         /// Finished the inbound stream.
         ///
         /// - Parameter error: The error to throw, or nil, to finish normally.
-        @inlinable
+        
         public func finish(throwing error: Error? = nil) {
             self.continuation.finish(throwing: error)
         }
@@ -62,7 +62,7 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
     /// This is useful for writing unit tests where you want to drive a ``NIOAsyncChannelInboundStream``.
     ///
     /// - Returns: A tuple containing the input stream and a test source to drive it.
-    @inlinable
+    
     public static func makeTestingStream() -> (Self, TestSource) {
         var continuation: AsyncThrowingStream<Inbound, Error>.Continuation!
         let stream = AsyncThrowingStream<Inbound, Error> { continuation = $0 }
@@ -71,12 +71,12 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
         return (inputStream, source)
     }
 
-    @inlinable
+    
     init(stream: AsyncThrowingStream<Inbound, Error>) {
         self._backing = .asyncStream(stream)
     }
 
-    @inlinable
+    
     init<HandlerInbound: Sendable>(
         channel: Channel,
         backPressureStrategy: NIOAsyncSequenceProducerBackPressureStrategies.HighLowWatermark?,
@@ -104,7 +104,7 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
     }
 
     /// Creates a new ``NIOAsyncChannelInboundStream`` which is used when the pipeline got synchronously wrapped.
-    @inlinable
+    
     static func makeWrappingHandler(
         channel: Channel,
         backPressureStrategy: NIOAsyncSequenceProducerBackPressureStrategies.HighLowWatermark?,
@@ -124,7 +124,7 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
     }
 
     /// Creates a new ``NIOAsyncChannelInboundStream`` which has hooks for transformations.
-    @inlinable
+    
     static func makeTransformationHandler(
         channel: Channel,
         backPressureStrategy: NIOAsyncSequenceProducerBackPressureStrategies.HighLowWatermark?,
@@ -159,7 +159,7 @@ extension NIOAsyncChannelInboundStream: AsyncSequence {
 
         @usableFromInline var _backing: _Backing
 
-        @inlinable
+        
         init(_ backing: NIOAsyncChannelInboundStream<Inbound>._Backing) {
             switch backing {
             case .asyncStream(let asyncStream):
@@ -169,7 +169,7 @@ extension NIOAsyncChannelInboundStream: AsyncSequence {
             }
         }
 
-        @inlinable
+        
         public mutating func next() async throws -> Element? {
             switch self._backing {
             case .asyncStream(var iterator):
@@ -185,7 +185,7 @@ extension NIOAsyncChannelInboundStream: AsyncSequence {
         }
     }
 
-    @inlinable
+    
     public func makeAsyncIterator() -> AsyncIterator {
         return AsyncIterator(self._backing)
     }

@@ -23,7 +23,7 @@ extension JSONSerialization {
     ///    - buffer: The ByteBuffer being used to derive the Foundation type.
     ///    - options: The reading option used when the parser derives the Foundation type from the ByteBuffer.
     /// - returns: The Foundation value if successful or `nil` if there was an issue creating the Foundation type.
-    @inlinable
+    
     public static func jsonObject(with buffer: ByteBuffer,
                                   options opt: JSONSerialization.ReadingOptions = []) throws -> Any {
         return try JSONSerialization.jsonObject(with: Data(buffer: buffer), options: opt)

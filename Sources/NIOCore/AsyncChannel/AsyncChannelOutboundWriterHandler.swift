@@ -49,7 +49,7 @@ internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>
     @usableFromInline
     let closeRatchet: CloseRatchet
 
-    @inlinable
+    
     init(
         eventLoop: EventLoop,
         closeRatchet: CloseRatchet
@@ -58,7 +58,7 @@ internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>
         self.closeRatchet = closeRatchet
     }
 
-    @inlinable
+    
     func _didYield(sequence: Deque<OutboundOut>) {
         // This is always called from an async context, so we must loop-hop.
         // Because we always loop-hop, we're always at the top of a stack frame. As this
@@ -75,7 +75,7 @@ internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>
         self._doOutboundWrites(context: context, writes: sequence)
     }
 
-    @inlinable
+    
     func _didYield(element: OutboundOut) {
         // This is always called from an async context, so we must loop-hop.
         // Because we always loop-hop, we're always at the top of a stack frame. As this
@@ -92,7 +92,7 @@ internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>
         self._doOutboundWrite(context: context, write: element)
     }
 
-    @inlinable
+    
     func _didTerminate(error: Error?) {
         self.eventLoop.preconditionInEventLoop()
 
@@ -110,7 +110,7 @@ internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>
         self.sink = nil
     }
 
-    @inlinable
+    
     func _doOutboundWrites(context: ChannelHandlerContext, writes: Deque<OutboundOut>) {
         for write in writes {
             context.write(self.wrapOutboundOut(write), promise: nil)
@@ -119,36 +119,36 @@ internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>
         context.flush()
     }
 
-    @inlinable
+    
     func _doOutboundWrite(context: ChannelHandlerContext, write: OutboundOut) {
         context.write(self.wrapOutboundOut(write), promise: nil)
         context.flush()
     }
 
-    @inlinable
+    
     func handlerAdded(context: ChannelHandlerContext) {
         self.context = context
     }
 
-    @inlinable
+    
     func handlerRemoved(context: ChannelHandlerContext) {
         self.context = nil
         self.sink?.finish()
     }
 
-    @inlinable
+    
     func channelInactive(context: ChannelHandlerContext) {
         self.sink?.finish()
         context.fireChannelInactive()
     }
 
-    @inlinable
+    
     func channelWritabilityChanged(context: ChannelHandlerContext) {
         self.sink?.setWritability(to: context.channel.isWritable)
         context.fireChannelWritabilityChanged()
     }
 
-    @inlinable
+    
     func userInboundEventTriggered(context: ChannelHandlerContext, event: Any) {
         switch event {
         case ChannelEvent.outputClosed:
@@ -174,13 +174,13 @@ extension NIOAsyncChannelOutboundWriterHandler {
         @usableFromInline
         let handler: NIOAsyncChannelOutboundWriterHandler<OutboundOut>
 
-        @inlinable
+        
         init(handler: NIOAsyncChannelOutboundWriterHandler<OutboundOut>) {
             self.eventLoop = handler.eventLoop
             self.handler = handler
         }
 
-        @inlinable
+        
         func didYield(contentsOf sequence: Deque<OutboundOut>) {
             if self.eventLoop.inEventLoop {
                 self.handler._didYield(sequence: sequence)
@@ -191,7 +191,7 @@ extension NIOAsyncChannelOutboundWriterHandler {
             }
         }
 
-        @inlinable
+        
         func didYield(_ element: OutboundOut) {
             if self.eventLoop.inEventLoop {
                 self.handler._didYield(element: element)
@@ -202,7 +202,7 @@ extension NIOAsyncChannelOutboundWriterHandler {
             }
         }
 
-        @inlinable
+        
         func didTerminate(error: Error?) {
             if self.eventLoop.inEventLoop {
                 self.handler._didTerminate(error: error)

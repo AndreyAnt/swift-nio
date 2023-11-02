@@ -39,7 +39,7 @@ extension EventLoopFuture {
     ///     - callback: Function that will receive the value of this `EventLoopFuture` and return
     ///         a new `EventLoopFuture`.
     /// - returns: A future that will receive the eventual value.
-    @inlinable
+    
     @preconcurrency
     public func flatMapWithEventLoop<NewValue>(_ callback: @escaping @Sendable (Value, EventLoop) -> EventLoopFuture<NewValue>) -> EventLoopFuture<NewValue> {
         let next = EventLoopPromise<NewValue>.makeUnleakablePromise(eventLoop: self.eventLoop)
@@ -73,7 +73,7 @@ extension EventLoopFuture {
     ///     - callback: Function that will receive the error value of this `EventLoopFuture` and return
     ///         a new value lifted into a new `EventLoopFuture`.
     /// - returns: A future that will receive the recovered value.
-    @inlinable
+    
     @preconcurrency
     public func flatMapErrorWithEventLoop(_ callback: @escaping @Sendable (Error, EventLoop) -> EventLoopFuture<Value>) -> EventLoopFuture<Value> {
         let next = EventLoopPromise<Value>.makeUnleakablePromise(eventLoop: self.eventLoop)
@@ -112,7 +112,7 @@ extension EventLoopFuture {
     ///     - futures: An array of `EventLoopFuture<NewValue>` to wait for.
     ///     - with: A function that will be used to fold the values of two `EventLoopFuture`s and return a new value wrapped in an `EventLoopFuture`.
     /// - returns: A new `EventLoopFuture` with the folded value whose callbacks run on `self.eventLoop`.
-    @inlinable
+    
     @preconcurrency
     public func foldWithEventLoop<OtherValue>(
         _ futures: [EventLoopFuture<OtherValue>],

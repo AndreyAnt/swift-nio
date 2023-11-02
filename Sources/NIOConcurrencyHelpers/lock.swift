@@ -101,7 +101,7 @@ public final class Lock {
     ///
     /// - Parameter body: The block to execute while holding the lock.
     /// - Returns: The value returned by the block.
-    @inlinable
+    
     public func withLock<T>(_ body: () throws -> T) rethrows -> T {
         self.lock()
         defer {
@@ -111,7 +111,7 @@ public final class Lock {
     }
 
     // specialise Void return (for performance)
-    @inlinable
+    
     public func withLockVoid(_ body: () throws -> Void) rethrows -> Void {
         try self.withLock(body)
     }
@@ -289,7 +289,7 @@ public final class ConditionLock<T: Equatable> {
 ///
 /// This is currently the only way to do this in Swift: see
 /// https://forums.swift.org/t/support-debug-only-code/11037 for a discussion.
-@inlinable
+
 internal func debugOnly(_ body: () -> Void) {
     assert({ body(); return true }())
 }

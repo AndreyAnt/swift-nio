@@ -210,7 +210,7 @@ extension ByteBuffer {
     /// - parameters:
     ///     - bytes: The bytes to write.
     /// - returns: The number of bytes written.
-    @inlinable
+    
     @discardableResult
     public mutating func writeContiguousBytes<Bytes: ContiguousBytes>(_ bytes: Bytes) -> Int {
         let written = self.setContiguousBytes(bytes, at: self.writerIndex)
@@ -224,7 +224,7 @@ extension ByteBuffer {
     ///     - bytes: The bytes to write.
     ///     - index: The index for the first byte.
     /// - returns: The number of bytes written.
-    @inlinable
+    
     @discardableResult
     public mutating func setContiguousBytes<Bytes: ContiguousBytes>(_ bytes: Bytes, at index: Int) -> Int {
         return bytes.withUnsafeBytes { bufferPointer in
@@ -237,7 +237,7 @@ extension ByteBuffer {
     /// - parameters:
     ///     - data: The data to write.
     /// - returns: The number of bytes written.
-    @inlinable
+    
     @discardableResult
     public mutating func writeData<D: DataProtocol>(_ data: D) -> Int {
         let written = self.setData(data, at: self.writerIndex)
@@ -251,7 +251,7 @@ extension ByteBuffer {
     ///     - data: The data to write.
     ///     - index: The index for the first byte.
     /// - returns: The number of bytes written.
-    @inlinable
+    
     @discardableResult
     public mutating func setData<D: DataProtocol>(_ data: D, at index: Int) -> Int {
         // DataProtocol refines RandomAccessCollection, so getting `count` must be O(1). This avoids
