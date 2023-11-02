@@ -526,7 +526,7 @@ public final class ChannelPipeline: ChannelInvoker {
 
     /// Synchronously finds a `ChannelHandlerContext` in the `ChannelPipeline`.
     /// - Important: This must be called on the `EventLoop`.
-    @usableFromInline // should be fileprivate
+     // should be fileprivate
     internal func _contextSync(_ body: (ChannelHandlerContext) -> Bool) -> Result<ChannelHandlerContext, Error> {
         self.eventLoop.assertInEventLoop()
 
@@ -1035,7 +1035,7 @@ extension ChannelPipeline {
     ///
     /// All functions **must** be called from the pipeline's event loop.
     public struct SynchronousOperations {
-        @usableFromInline
+        
         internal let _pipeline: ChannelPipeline
 
         fileprivate init(pipeline: ChannelPipeline) {

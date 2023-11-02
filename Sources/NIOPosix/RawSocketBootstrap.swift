@@ -37,7 +37,7 @@ public final class NIORawSocketBootstrap {
 
     private let group: EventLoopGroup
     private var channelInitializer: Optional<ChannelInitializerCallback>
-    @usableFromInline
+    
     internal var _channelOptions: ChannelOptions.Storage
 
     /// Create a `RawSocketBootstrap` on the `EventLoopGroup` `group`.

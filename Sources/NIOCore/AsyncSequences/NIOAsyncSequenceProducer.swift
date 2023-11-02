@@ -111,7 +111,7 @@ public struct NIOAsyncSequenceProducer<
         /// The actual sequence which should be passed to the consumer.
         public let sequence: NIOAsyncSequenceProducer
 
-        @usableFromInline
+        
         /* fileprivate */ internal init(
             source: Source,
             sequence: NIOAsyncSequenceProducer
@@ -121,7 +121,7 @@ public struct NIOAsyncSequenceProducer<
         }
     }
 
-    @usableFromInline
+    
     /* private */ internal let _throwingSequence: NIOThrowingAsyncSequenceProducer<
         Element,
         Never,
@@ -176,7 +176,7 @@ extension NIOAsyncSequenceProducer: AsyncSequence {
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension NIOAsyncSequenceProducer {
     public struct AsyncIterator: AsyncIteratorProtocol {
-        @usableFromInline
+        
         /* private */ internal let _throwingIterator: NIOThrowingAsyncSequenceProducer<
             Element,
             Never,
@@ -212,9 +212,9 @@ extension NIOAsyncSequenceProducer {
         /// This class is needed to hook the deinit to observe once all references to the ``NIOAsyncSequenceProducer/Source`` are dropped.
         ///
         /// - Important: This is safe to be unchecked ``Sendable`` since the `storage` is ``Sendable`` and `immutable`.
-        @usableFromInline
+        
         /* fileprivate */ internal final class InternalClass: Sendable {
-            @usableFromInline
+            
             typealias ThrowingSource = NIOThrowingAsyncSequenceProducer<
                 Element,
                 Never,
@@ -222,7 +222,7 @@ extension NIOAsyncSequenceProducer {
                 Delegate
             >.Source
 
-            @usableFromInline
+            
             /* fileprivate */ internal let _throwingSource: ThrowingSource
 
             
@@ -237,15 +237,15 @@ extension NIOAsyncSequenceProducer {
             }
         }
 
-        @usableFromInline
+        
         /* private */ internal let _internalClass: InternalClass
 
-        @usableFromInline
+        
         /* private */ internal var _throwingSource: InternalClass.ThrowingSource {
             self._internalClass._throwingSource
         }
 
-        @usableFromInline
+        
         /* fileprivate */ internal init(throwingSource: InternalClass.ThrowingSource) {
             self._internalClass = .init(throwingSource: throwingSource)
         }

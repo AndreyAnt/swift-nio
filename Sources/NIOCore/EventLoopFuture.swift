@@ -22,13 +22,13 @@ import Dispatch
 ///
 /// In particular, note that _run() here continues to obtain and execute lists of callbacks until it completes.
 /// This eliminates recursion when processing `flatMap()` chains.
-@usableFromInline
+
 internal struct CallbackList {
-    @usableFromInline
+    
     internal typealias Element = @Sendable () -> CallbackList
-    @usableFromInline
+    
     internal var firstCallback: Optional<Element>
-    @usableFromInline
+    
     internal var furtherCallbacks: Optional<[Element]>
 
     
@@ -113,9 +113,9 @@ internal struct CallbackList {
 }
 
 /// Internal error for operations that return results that were not replaced
-@usableFromInline
+
 internal struct OperationPlaceholderError: Error {
-    @usableFromInline
+    
     internal init() {}
 }
 
@@ -378,7 +378,7 @@ public struct EventLoopPromise<Value> {
 /// `EventLoopFuture` should be sufficient to guarantee thread-safety.
 public final class EventLoopFuture<Value> {
     // TODO: Provide a tracing facility.  It would be nice to be able to set '.debugTrace = true' on any EventLoopFuture or EventLoopPromise and have every subsequent chained EventLoopFuture report the success result or failure error.  That would simplify some debugging scenarios.
-    @usableFromInline
+    
     internal var _value: Optional<Result<Value, Error>>
 
     /// The `EventLoop` which is tied to the `EventLoopFuture` and is used to notify all registered callbacks.
@@ -388,7 +388,7 @@ public final class EventLoopFuture<Value> {
     /// These callbacks may give values to other `EventLoopFuture`s; if that happens,
     /// they return any callbacks from those `EventLoopFuture`s so that we can run
     /// the entire chain from the top without recursing.
-    @usableFromInline
+    
     internal var _callbacks: CallbackList
 
     
@@ -473,7 +473,7 @@ extension EventLoopFuture {
     public func flatMap<NewValue>(_ callback: @escaping @Sendable (Value) -> EventLoopFuture<NewValue>) -> EventLoopFuture<NewValue> {
         self._flatMap(callback)
     }
-    @usableFromInline typealias FlatMapCallback<NewValue> = @Sendable (Value) -> EventLoopFuture<NewValue>
+     typealias FlatMapCallback<NewValue> = @Sendable (Value) -> EventLoopFuture<NewValue>
 
     
     func _flatMap<NewValue>(_ callback: @escaping FlatMapCallback<NewValue>) -> EventLoopFuture<NewValue> {
@@ -516,7 +516,7 @@ extension EventLoopFuture {
     public func flatMapThrowing<NewValue>(_ callback: @escaping @Sendable (Value) throws -> NewValue) -> EventLoopFuture<NewValue> {
         self._flatMapThrowing(callback)
     }
-    @usableFromInline typealias FlatMapThrowingCallback<NewValue> = @Sendable (Value) throws -> NewValue
+     typealias FlatMapThrowingCallback<NewValue> = @Sendable (Value) throws -> NewValue
 
     
     func _flatMapThrowing<NewValue>(_ callback: @escaping FlatMapThrowingCallback<NewValue>) -> EventLoopFuture<NewValue> {
@@ -556,7 +556,7 @@ extension EventLoopFuture {
     public func flatMapErrorThrowing(_ callback: @escaping @Sendable (Error) throws -> Value) -> EventLoopFuture<Value> {
         self._flatMapErrorThrowing(callback)
     }
-    @usableFromInline typealias FlatMapErrorThrowingCallback = @Sendable (Error) throws -> Value
+     typealias FlatMapErrorThrowingCallback = @Sendable (Error) throws -> Value
 
     
     func _flatMapErrorThrowing(_ callback: @escaping FlatMapErrorThrowingCallback) -> EventLoopFuture<Value> {
@@ -608,7 +608,7 @@ extension EventLoopFuture {
     public func map<NewValue>(_ callback: @escaping @Sendable (Value) -> (NewValue)) -> EventLoopFuture<NewValue> {
         self._map(callback)
     }
-    @usableFromInline typealias MapCallback<NewValue> = @Sendable (Value) -> (NewValue)
+     typealias MapCallback<NewValue> = @Sendable (Value) -> (NewValue)
 
     
     func _map<NewValue>(_ callback: @escaping MapCallback<NewValue>) -> EventLoopFuture<NewValue> {
@@ -640,7 +640,7 @@ extension EventLoopFuture {
     public func flatMapError(_ callback: @escaping @Sendable (Error) -> EventLoopFuture<Value>) -> EventLoopFuture<Value> {
         self._flatMapError(callback)
     }
-    @usableFromInline typealias FlatMapErrorCallback = @Sendable (Error) -> EventLoopFuture<Value>
+     typealias FlatMapErrorCallback = @Sendable (Error) -> EventLoopFuture<Value>
 
     
     func _flatMapError(_ callback: @escaping FlatMapErrorCallback) -> EventLoopFuture<Value> {
@@ -682,7 +682,7 @@ extension EventLoopFuture {
     public func flatMapResult<NewValue, SomeError: Error>(_ body: @escaping @Sendable (Value) -> Result<NewValue, SomeError>) -> EventLoopFuture<NewValue> {
         self._flatMapResult(body)
     }
-    @usableFromInline typealias FlatMapResultCallback<NewValue, SomeError: Error> = @Sendable (Value) -> Result<NewValue, SomeError>
+     typealias FlatMapResultCallback<NewValue, SomeError: Error> = @Sendable (Value) -> Result<NewValue, SomeError>
 
     
     func _flatMapResult<NewValue, SomeError: Error>(_ body: @escaping FlatMapResultCallback<NewValue, SomeError>) -> EventLoopFuture<NewValue> {
@@ -720,7 +720,7 @@ extension EventLoopFuture {
     public func recover(_ callback: @escaping @Sendable (Error) -> Value) -> EventLoopFuture<Value> {
         self._recover(callback)
     }
-    @usableFromInline typealias RecoverCallback = @Sendable (Error) -> Value
+     typealias RecoverCallback = @Sendable (Error) -> Value
 
     
     func _recover(_ callback: @escaping RecoverCallback) -> EventLoopFuture<Value> {
@@ -736,7 +736,7 @@ extension EventLoopFuture {
         return next.futureResult
     }
 
-    @usableFromInline typealias AddCallbackCallback = @Sendable () -> CallbackList
+     typealias AddCallbackCallback = @Sendable () -> CallbackList
     /// Add a callback.  If there's already a value, invoke it and return the resulting list of new callback functions.
     
     internal func _addCallback(_ callback: @escaping AddCallbackCallback) -> CallbackList {
@@ -754,7 +754,7 @@ extension EventLoopFuture {
     internal func _whenComplete(_ callback: @escaping @Sendable () -> CallbackList) {
         self._internalWhenComplete(callback)
     }
-    @usableFromInline typealias InternalWhenCompleteCallback = @Sendable () -> CallbackList
+     typealias InternalWhenCompleteCallback = @Sendable () -> CallbackList
 
     /// Add a callback.  If there's already a value, run as much of the chain as we can.
     
@@ -783,7 +783,7 @@ extension EventLoopFuture {
     public func whenSuccess(_ callback: @escaping @Sendable (Value) -> Void) {
         self._whenSuccess(callback)
     }
-    @usableFromInline typealias WhenSuccessCallback = @Sendable (Value) -> Void
+     typealias WhenSuccessCallback = @Sendable (Value) -> Void
 
     
     func _whenSuccess(_ callback: @escaping WhenSuccessCallback) {
@@ -810,7 +810,7 @@ extension EventLoopFuture {
     public func whenFailure(_ callback: @escaping @Sendable (Error) -> Void) {
         self._whenFailure(callback)
     }
-    @usableFromInline typealias WhenFailureCallback = @Sendable (Error) -> Void
+     typealias WhenFailureCallback = @Sendable (Error) -> Void
 
     
     func _whenFailure(_ callback: @escaping WhenFailureCallback) {
@@ -832,7 +832,7 @@ extension EventLoopFuture {
     public func whenComplete(_ callback: @escaping @Sendable (Result<Value, Error>) -> Void) {
         self._publicWhenComplete(callback)
     }
-    @usableFromInline typealias WhenCompleteCallback = @Sendable (Result<Value, Error>) -> Void
+     typealias WhenCompleteCallback = @Sendable (Result<Value, Error>) -> Void
     
     func _publicWhenComplete(_ callback: @escaping WhenCompleteCallback) {
         self._whenComplete {
@@ -1048,7 +1048,7 @@ extension EventLoopFuture {
     ) -> EventLoopFuture<Value> {
         self._fold(futures, with: combiningFunction)
     }
-    @usableFromInline typealias FoldCallback<OtherValue> = @Sendable (Value, OtherValue) -> EventLoopFuture<Value>
+     typealias FoldCallback<OtherValue> = @Sendable (Value, OtherValue) -> EventLoopFuture<Value>
 
     
     func _fold<OtherValue>(
@@ -1112,7 +1112,7 @@ extension EventLoopFuture {
     ) -> EventLoopFuture<Value> {
         Self._reduce(initialResult, futures, on: eventLoop, nextPartialResult)
     }
-    @usableFromInline typealias ReduceCallback<InputValue> = @Sendable (Value, InputValue) -> Value
+     typealias ReduceCallback<InputValue> = @Sendable (Value, InputValue) -> Value
 
     
     static func _reduce<InputValue>(
@@ -1157,7 +1157,7 @@ extension EventLoopFuture {
     ) -> EventLoopFuture<Value> {
         Self._reduce(into: initialResult, futures, on: eventLoop, updateAccumulatingResult)
     }
-    @usableFromInline typealias ReduceIntoCallback<InputValue> = @Sendable (inout Value, InputValue) -> Void
+     typealias ReduceIntoCallback<InputValue> = @Sendable (inout Value, InputValue) -> Void
 
     
     static func _reduce<InputValue>(
@@ -1281,7 +1281,7 @@ extension EventLoopFuture {
         }
     }
 
-    @usableFromInline typealias ReduceSuccessCallback<InputValue> = @Sendable (Int, InputValue) -> Void
+     typealias ReduceSuccessCallback<InputValue> = @Sendable (Int, InputValue) -> Void
     /// Loops through the futures array and attaches callbacks to execute `onValue` on the provided `EventLoop` when
     /// they succeed. The `onValue` will receive the index of the future that fulfilled the provided `Result`.
     ///
@@ -1439,7 +1439,7 @@ extension EventLoopFuture {
         }
     }
 
-    @usableFromInline typealias ReduceCompletions<InputValue> = @Sendable (Int, Result<InputValue, Error>) -> Void
+     typealias ReduceCompletions<InputValue> = @Sendable (Int, Result<InputValue, Error>) -> Void
 
     /// Loops through the futures array and attaches callbacks to execute `onResult` on the provided `EventLoop` when
     /// they complete. The `onResult` will receive the index of the future that fulfilled the provided `Result`.
@@ -1526,7 +1526,7 @@ extension EventLoopFuture {
     public func always(_ callback: @escaping @Sendable (Result<Value, Error>) -> Void) -> EventLoopFuture<Value> {
         self._always(callback)
     }
-    @usableFromInline typealias AlwaysCallback = @Sendable (Result<Value, Error>) -> Void
+     typealias AlwaysCallback = @Sendable (Result<Value, Error>) -> Void
 
     
     func _always(_ callback: @escaping AlwaysCallback) -> EventLoopFuture<Value> {
@@ -1608,7 +1608,7 @@ extension EventLoopFuture {
     ) -> EventLoopFuture<NewValue> where Value == Optional<NewValue> {
         self._unwrap(orElse: callback)
     }
-    @usableFromInline typealias UnwrapCallback<NewValue> = @Sendable () -> NewValue
+     typealias UnwrapCallback<NewValue> = @Sendable () -> NewValue
 
     
     func _unwrap<NewValue>(
@@ -1644,7 +1644,7 @@ extension EventLoopFuture {
     ) -> EventLoopFuture<NewValue> {
         self._flatMapBlocking(onto: queue, callbackMayBlock)
     }
-    @usableFromInline typealias FlatMapBlockingCallback<NewValue> = @Sendable (Value) throws -> NewValue
+     typealias FlatMapBlockingCallback<NewValue> = @Sendable (Value) throws -> NewValue
 
     
     func _flatMapBlocking<NewValue>(
@@ -1690,7 +1690,7 @@ extension EventLoopFuture {
     public func whenFailureBlocking(onto queue: DispatchQueue, _ callbackMayBlock: @escaping @Sendable (Error) -> Void) {
         self._whenFailureBlocking(onto: queue, callbackMayBlock)
     }
-    @usableFromInline typealias WhenFailureBlockingCallback = @Sendable (Error) -> Void
+     typealias WhenFailureBlockingCallback = @Sendable (Error) -> Void
 
     
     func _whenFailureBlocking(onto queue: DispatchQueue, _ callbackMayBlock: @escaping WhenFailureBlockingCallback) {
@@ -1710,7 +1710,7 @@ extension EventLoopFuture {
     public func whenCompleteBlocking(onto queue: DispatchQueue, _ callbackMayBlock: @escaping @Sendable (Result<Value, Error>) -> Void) {
         self._whenCompleteBlocking(onto: queue, callbackMayBlock)
     }
-    @usableFromInline typealias WhenCompleteBlocking = @Sendable (Result<Value, Error>) -> Void
+     typealias WhenCompleteBlocking = @Sendable (Result<Value, Error>) -> Void
 
     
     func _whenCompleteBlocking(onto queue: DispatchQueue, _ callbackMayBlock: @escaping WhenCompleteBlocking) {
@@ -1811,7 +1811,7 @@ extension EventLoopFuture {
 public struct _NIOEventLoopFutureIdentifier: Hashable, Sendable {
     private var opaqueID: UInt
 
-    @usableFromInline
+    
     internal init<T>(_ future: EventLoopFuture<T>) {
         self.opaqueID = _NIOEventLoopFutureIdentifier.obfuscatePointerValue(future: future)
     }

@@ -26,14 +26,14 @@ import Musl
 #endif
 
 #if os(Windows)
-@usableFromInline
+
 typealias LockPrimitive = SRWLOCK
 #else
-@usableFromInline
+
 typealias LockPrimitive = pthread_mutex_t
 #endif
 
-@usableFromInline
+
 enum LockOperations { }
 
 extension LockOperations {
@@ -120,7 +120,7 @@ extension LockOperations {
 // and future maintainers will be happier that we were cautious.
 //
 // See also: https://github.com/apple/swift/pull/40000
-@usableFromInline
+
 final class LockStorage<Value>: ManagedBuffer<Value, LockPrimitive> {
     
     
@@ -186,7 +186,7 @@ extension LockStorage: @unchecked Sendable { }
 /// one used by NIO. On Windows, the lock is based on the substantially similar
 /// `SRWLOCK` type.
 public struct NIOLock {
-    @usableFromInline
+    
     internal let _storage: LockStorage<Void>
     
     /// Create a new lock.

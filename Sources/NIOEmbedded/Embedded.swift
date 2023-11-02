@@ -242,7 +242,7 @@ public final class EmbeddedEventLoop: EventLoop {
     #endif
 }
 
-@usableFromInline
+
 class EmbeddedChannelCore: ChannelCore {
     var isOpen: Bool {
         get {
@@ -296,33 +296,33 @@ class EmbeddedChannelCore: ChannelCore {
     }
 
     /// Contains the flushed items that went into the `Channel` (and on a regular channel would have hit the network).
-    @usableFromInline
+    
     var outboundBuffer: CircularBuffer<NIOAny> = CircularBuffer()
 
     /// Contains observers that want to consume the first element that would be appended to the `outboundBuffer`
-    @usableFromInline
+    
     var outboundBufferConsumer: Deque<(NIOAny) -> Void> = []
 
     /// Contains the unflushed items that went into the `Channel`
-    @usableFromInline
+    
     var pendingOutboundBuffer: MarkedCircularBuffer<(NIOAny, EventLoopPromise<Void>?)> = MarkedCircularBuffer(initialCapacity: 16)
 
     /// Contains the items that travelled the `ChannelPipeline` all the way and hit the tail channel handler. On a
     /// regular `Channel` these items would be lost.
-    @usableFromInline
+    
     var inboundBuffer: CircularBuffer<NIOAny> = CircularBuffer()
 
     /// Contains observers that want to consume the first element that would be appended to the `inboundBuffer`
-    @usableFromInline
+    
     var inboundBufferConsumer: Deque<(NIOAny) -> Void> = []
 
-    @usableFromInline
+    
     var localAddress: SocketAddress?
 
-    @usableFromInline
+    
     var remoteAddress: SocketAddress?
 
-    @usableFromInline
+    
     func localAddress0() throws -> SocketAddress {
         self.eventLoop.preconditionInEventLoop()
         if let localAddress = self.localAddress {
@@ -332,7 +332,7 @@ class EmbeddedChannelCore: ChannelCore {
         }
     }
 
-    @usableFromInline
+    
     func remoteAddress0() throws -> SocketAddress {
         self.eventLoop.preconditionInEventLoop()
         if let remoteAddress = self.remoteAddress {
@@ -342,7 +342,7 @@ class EmbeddedChannelCore: ChannelCore {
         }
     }
 
-    @usableFromInline
+    
     func close0(error: Error, mode: CloseMode, promise: EventLoopPromise<Void>?) {
         self.eventLoop.preconditionInEventLoop()
         guard self.isOpen else {
@@ -364,13 +364,13 @@ class EmbeddedChannelCore: ChannelCore {
         }
     }
 
-    @usableFromInline
+    
     func bind0(to address: SocketAddress, promise: EventLoopPromise<Void>?) {
         self.eventLoop.preconditionInEventLoop()
         promise?.succeed(())
     }
 
-    @usableFromInline
+    
     func connect0(to address: SocketAddress, promise: EventLoopPromise<Void>?) {
         self.eventLoop.preconditionInEventLoop()
         isActive = true
@@ -378,14 +378,14 @@ class EmbeddedChannelCore: ChannelCore {
         self.pipeline.syncOperations.fireChannelActive()
     }
 
-    @usableFromInline
+    
     func register0(promise: EventLoopPromise<Void>?) {
         self.eventLoop.preconditionInEventLoop()
         promise?.succeed(())
         self.pipeline.syncOperations.fireChannelRegistered()
     }
 
-    @usableFromInline
+    
     func registerAlreadyConfigured0(promise: EventLoopPromise<Void>?) {
         self.eventLoop.preconditionInEventLoop()
         isActive = true
@@ -393,13 +393,13 @@ class EmbeddedChannelCore: ChannelCore {
         self.pipeline.syncOperations.fireChannelActive()
     }
 
-    @usableFromInline
+    
     func write0(_ data: NIOAny, promise: EventLoopPromise<Void>?) {
         self.eventLoop.preconditionInEventLoop()
         self.pendingOutboundBuffer.append((data, promise))
     }
 
-    @usableFromInline
+    
     func flush0() {
         self.eventLoop.preconditionInEventLoop()
         self.pendingOutboundBuffer.mark()
@@ -414,7 +414,7 @@ class EmbeddedChannelCore: ChannelCore {
         }
     }
 
-    @usableFromInline
+    
     func read0() {
         self.eventLoop.preconditionInEventLoop()
         // NOOP
@@ -425,7 +425,7 @@ class EmbeddedChannelCore: ChannelCore {
         promise?.fail(ChannelError.operationUnsupported)
     }
 
-    @usableFromInline
+    
     func channelRead0(_ data: NIOAny) {
         self.eventLoop.preconditionInEventLoop()
         self.addToBuffer(
@@ -581,7 +581,7 @@ public final class EmbeddedChannel: Channel {
     /// - see: `Channel.closeFuture`
     public var closeFuture: EventLoopFuture<Void> { return channelcore.closePromise.futureResult }
 
-    @usableFromInline
+    
     /*private but usableFromInline */ lazy var channelcore: EmbeddedChannelCore = EmbeddedChannelCore(pipeline: self._pipeline, eventLoop: self.eventLoop)
 
     /// - see: `Channel._channelCore`
@@ -859,7 +859,7 @@ public final class EmbeddedChannel: Channel {
 
 extension EmbeddedChannel {
     public struct SynchronousOptions: NIOSynchronousChannelOptions {
-        @usableFromInline
+        
         internal let channel: EmbeddedChannel
 
         fileprivate init(channel: EmbeddedChannel) {

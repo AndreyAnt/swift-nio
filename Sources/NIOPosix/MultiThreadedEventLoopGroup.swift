@@ -403,9 +403,9 @@ extension MultiThreadedEventLoopGroup: CustomStringConvertible {
 }
 
 #if swift(>=5.9)
-@usableFromInline
+
 struct ErasedUnownedJob {
-    @usableFromInline
+    
     let erasedJob: Any
 
     @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
@@ -422,9 +422,9 @@ struct ErasedUnownedJob {
 }
 #endif
 
-@usableFromInline
+
 internal struct ScheduledTask {
-    @usableFromInline
+    
     enum UnderlyingTask {
         case function(() -> Void)
         #if swift(>=5.9)
@@ -437,14 +437,14 @@ internal struct ScheduledTask {
     /// - Important: This id has two purposes. First, it is used to give this struct an identity so that we can implement ``Equatable``
     ///     Second, it is used to give the tasks an order which we use to execute them.
     ///     This means, the ids need to be unique for a given ``SelectableEventLoop`` and they need to be in ascending order.
-    @usableFromInline
+    
     let id: UInt64
     let task: UnderlyingTask
     private let failFn: ((Error) ->())?
-    @usableFromInline
+    
     internal let readyTime: NIODeadline
 
-    @usableFromInline
+    
     init(id: UInt64, _ task: @escaping () -> Void, _ failFn: @escaping (Error) -> Void, _ time: NIODeadline) {
         self.id = id
         self.task = .function(task)
@@ -454,7 +454,7 @@ internal struct ScheduledTask {
 
     #if swift(>=5.9)
     @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-    @usableFromInline
+    
     init(id: UInt64, job: consuming ExecutorJob, readyTime: NIODeadline) {
         self.id = id
         self.task = .unownedJob(.init(job: UnownedJob(job)))
@@ -469,14 +469,14 @@ internal struct ScheduledTask {
 }
 
 extension ScheduledTask: CustomStringConvertible {
-    @usableFromInline
+    
     var description: String {
         return "ScheduledTask(readyTime: \(self.readyTime))"
     }
 }
 
 extension ScheduledTask: Comparable {
-    @usableFromInline
+    
     static func < (lhs: ScheduledTask, rhs: ScheduledTask) -> Bool {
         if lhs.readyTime == rhs.readyTime {
             return lhs.id < rhs.id
@@ -485,7 +485,7 @@ extension ScheduledTask: Comparable {
         }
     }
 
-    @usableFromInline
+    
     static func == (lhs: ScheduledTask, rhs: ScheduledTask) -> Bool {
         return lhs.id == rhs.id
     }

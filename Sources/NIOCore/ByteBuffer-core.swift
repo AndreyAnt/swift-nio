@@ -24,23 +24,23 @@ import Musl
 #error("The Byte Buffer module was unable to identify your C library.")
 #endif
 
-@usableFromInline let sysMalloc: @convention(c) (size_t) -> UnsafeMutableRawPointer? = malloc
-@usableFromInline let sysRealloc: @convention(c) (UnsafeMutableRawPointer?, size_t) -> UnsafeMutableRawPointer? = realloc
+ let sysMalloc: @convention(c) (size_t) -> UnsafeMutableRawPointer? = malloc
+ let sysRealloc: @convention(c) (UnsafeMutableRawPointer?, size_t) -> UnsafeMutableRawPointer? = realloc
 
 /// Xcode 13 GM shipped with a bug in the SDK that caused `free`'s first argument to be annotated as
 /// non-nullable. To that end, we define a thunk through to `free` that matches that constraint, as we
 /// never pass a `nil` pointer to it.
-@usableFromInline let sysFree: @convention(c) (UnsafeMutableRawPointer) -> Void = { free($0) }
+ let sysFree: @convention(c) (UnsafeMutableRawPointer) -> Void = { free($0) }
 
 extension _ByteBufferSlice: Equatable {}
 
 /// The slice of a `ByteBuffer`, it's different from `Range<UInt32>` because the lower bound is actually only
 /// 24 bits (the upper bound is still 32). Before constructing, you need to make sure the lower bound actually
 /// fits within 24 bits, otherwise the behaviour is undefined.
-@usableFromInline
+
 struct _ByteBufferSlice: Sendable {
-    @usableFromInline private(set) var upperBound: ByteBuffer._Index
-    @usableFromInline private(set) var _begin: _UInt24
+     private(set) var upperBound: ByteBuffer._Index
+     private(set) var _begin: _UInt24
      var lowerBound: ByteBuffer._Index {
         return UInt32(self._begin)
     }
@@ -66,7 +66,7 @@ extension _ByteBufferSlice {
 }
 
 extension _ByteBufferSlice: CustomStringConvertible {
-    @usableFromInline
+    
     var description: String {
         return "_ByteBufferSlice { \(self.lowerBound)..<\(self.upperBound) }"
     }
@@ -117,13 +117,13 @@ public struct ByteBufferAllocator: Sendable {
         return ByteBuffer(allocator: self, startingCapacity: capacity)
     }
 
-    @usableFromInline
+    
     internal static let zeroCapacityWithDefaultAllocator = ByteBuffer(allocator: ByteBufferAllocator(), startingCapacity: 0)
 
-    @usableFromInline internal let malloc: @convention(c) (size_t) -> UnsafeMutableRawPointer?
-    @usableFromInline internal let realloc: @convention(c) (UnsafeMutableRawPointer?, size_t) -> UnsafeMutableRawPointer?
-    @usableFromInline internal let free: @convention(c) (UnsafeMutableRawPointer) -> Void
-    @usableFromInline internal let memcpy: @convention(c) (UnsafeMutableRawPointer, UnsafeRawPointer, size_t) -> Void
+     internal let malloc: @convention(c) (size_t) -> UnsafeMutableRawPointer?
+     internal let realloc: @convention(c) (UnsafeMutableRawPointer?, size_t) -> UnsafeMutableRawPointer?
+     internal let free: @convention(c) (UnsafeMutableRawPointer) -> Void
+     internal let memcpy: @convention(c) (UnsafeMutableRawPointer, UnsafeRawPointer, size_t) -> Void
 }
 
  func _toCapacity(_ value: Int) -> ByteBuffer._Capacity {
@@ -248,9 +248,9 @@ public struct ByteBufferAllocator: Sendable {
 ///     /* `bufDataByteOnly` and `buf` will share their storage */
 ///
 public struct ByteBuffer {
-    @usableFromInline typealias Slice = _ByteBufferSlice
-    @usableFromInline typealias Allocator = ByteBufferAllocator
-    // these two type aliases should be made `@usableFromInline internal` for
+     typealias Slice = _ByteBufferSlice
+     typealias Allocator = ByteBufferAllocator
+    // these two type aliases should be made ` internal` for
     // the 2.0 release when we can drop Swift 4.0 & 4.1 support. The reason they
     // must be public is because Swift 4.0 and 4.1 don't support attributes for
     // typealiases and Swift 4.2 warns if those attributes aren't present and
@@ -258,17 +258,17 @@ public struct ByteBuffer {
     public typealias _Index = UInt32
     public typealias _Capacity = UInt32
 
-    @usableFromInline var _storage: _Storage
-    @usableFromInline var _readerIndex: _Index
-    @usableFromInline var _writerIndex: _Index
-    @usableFromInline var _slice: Slice
+     var _storage: _Storage
+     var _readerIndex: _Index
+     var _writerIndex: _Index
+     var _slice: Slice
 
     // MARK: Internal _Storage for CoW
     /// Note: This class is **not** thread-safe
-    @usableFromInline final class _Storage {
-        @usableFromInline private(set) var capacity: _Capacity
-        @usableFromInline private(set) var bytes: UnsafeMutableRawPointer
-        @usableFromInline let allocator: ByteBufferAllocator
+     final class _Storage {
+         private(set) var capacity: _Capacity
+         private(set) var bytes: UnsafeMutableRawPointer
+         let allocator: ByteBufferAllocator
 
         
         init(bytesNoCopy: UnsafeMutableRawPointer, capacity: _Capacity, allocator: ByteBufferAllocator) {

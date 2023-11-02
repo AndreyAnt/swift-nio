@@ -60,7 +60,7 @@ fileprivate func sys_sched_yield() {
 /// SwiftNIO this usually involves communicating across multiple event loops.
 @available(*, deprecated, message: "please use UnsafeAtomic from https://github.com/apple/swift-atomics instead")
 public struct UnsafeEmbeddedAtomic<T: AtomicPrimitive> {
-    @usableFromInline
+    
     internal let value: OpaquePointer
 
     /// Create an atomic object with `value`.
@@ -183,7 +183,7 @@ public struct UnsafeEmbeddedAtomic<T: AtomicPrimitive> {
 /// the thread that modified it gets a local copy!
 @available(*, deprecated, message:"please use ManagedAtomic from https://github.com/apple/swift-atomics instead")
 public final class Atomic<T: AtomicPrimitive> {
-    @usableFromInline
+    
     internal let embedded: UnsafeEmbeddedAtomic<T>
 
     /// Create an atomic object with `value`.

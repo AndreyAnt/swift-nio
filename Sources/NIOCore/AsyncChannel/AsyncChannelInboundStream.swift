@@ -17,12 +17,12 @@
 /// This is a unicast async sequence that allows a single iterator to be created.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
-    @usableFromInline
+    
     typealias Producer = NIOThrowingAsyncSequenceProducer<Inbound, Error, NIOAsyncSequenceProducerBackPressureStrategies.HighLowWatermark, NIOAsyncChannelInboundStreamChannelHandlerProducerDelegate>
 
     /// A source used for driving a ``NIOAsyncChannelInboundStream`` during tests.
     public struct TestSource {
-        @usableFromInline
+        
         internal let continuation: AsyncThrowingStream<Inbound, Error>.Continuation
 
         
@@ -47,14 +47,14 @@ public struct NIOAsyncChannelInboundStream<Inbound: Sendable>: Sendable {
         }
     }
 
-    @usableFromInline
+    
     enum _Backing: Sendable {
         case asyncStream(AsyncThrowingStream<Inbound, Error>)
         case producer(Producer)
     }
 
     /// The underlying async sequence.
-    @usableFromInline
+    
     let _backing: _Backing
 
     /// Creates a new stream with a source for testing.
@@ -151,13 +151,13 @@ extension NIOAsyncChannelInboundStream: AsyncSequence {
     public typealias Element = Inbound
 
     public struct AsyncIterator: AsyncIteratorProtocol {
-        @usableFromInline
+        
         enum _Backing {
             case asyncStream(AsyncThrowingStream<Inbound, Error>.Iterator)
             case producer(Producer.AsyncIterator)
         }
 
-        @usableFromInline var _backing: _Backing
+         var _backing: _Backing
 
         
         init(_ backing: NIOAsyncChannelInboundStream<Inbound>._Backing) {

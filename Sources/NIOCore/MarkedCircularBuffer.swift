@@ -18,8 +18,8 @@
 /// writes and mark how far through the buffer the user has flushed, and therefore how far through the buffer is
 /// safe to write.
 public struct MarkedCircularBuffer<Element>: CustomStringConvertible {
-    @usableFromInline internal var _buffer: CircularBuffer<Element>
-    @usableFromInline internal var _markedIndexOffset: Int? /* nil: nothing marked */
+     internal var _buffer: CircularBuffer<Element>
+     internal var _markedIndexOffset: Int? /* nil: nothing marked */
 
     /// Create a new instance.
     ///

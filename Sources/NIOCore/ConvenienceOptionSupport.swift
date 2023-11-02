@@ -129,7 +129,7 @@ extension ChannelOptions {
             }
         }
         
-        @usableFromInline
+        
         mutating func add(_ element: TCPConvenienceOption) {
             switch element.data {
             case .allowLocalEndpointReuse:

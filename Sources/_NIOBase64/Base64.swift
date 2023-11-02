@@ -34,7 +34,7 @@ public enum Base64Error: Error {
     case invalidCharacter
 }
 
-@usableFromInline
+
 internal struct Base64 {
 
     
@@ -112,7 +112,7 @@ internal struct Base64 {
     // MARK: Internal
 
     // The base64 unicode table.
-    @usableFromInline
+    
     static let encodeBase64: [UInt8] = [
         UInt8(ascii: "A"), UInt8(ascii: "B"), UInt8(ascii: "C"), UInt8(ascii: "D"),
         UInt8(ascii: "E"), UInt8(ascii: "F"), UInt8(ascii: "G"), UInt8(ascii: "H"),
@@ -132,16 +132,16 @@ internal struct Base64 {
         UInt8(ascii: "8"), UInt8(ascii: "9"), UInt8(ascii: "+"), UInt8(ascii: "/"),
     ]
 
-    @usableFromInline
+    
     static let encodePaddingCharacter: UInt8 = UInt8(ascii: "=")
 
-    @usableFromInline
+    
     static func encode(alphabet: [UInt8], firstByte: UInt8) -> UInt8 {
         let index = firstByte >> 2
         return alphabet[Int(index)]
     }
 
-    @usableFromInline
+    
     static func encode(alphabet: [UInt8], firstByte: UInt8, secondByte: UInt8?) -> UInt8 {
         var index = (firstByte & 0b00000011) << 4
         if let secondByte = secondByte {
@@ -150,7 +150,7 @@ internal struct Base64 {
         return alphabet[Int(index)]
     }
 
-    @usableFromInline
+    
     static func encode(alphabet: [UInt8], secondByte: UInt8?, thirdByte: UInt8?) -> UInt8 {
         guard let secondByte = secondByte else {
             // No second byte means we are just emitting padding.
@@ -163,7 +163,7 @@ internal struct Base64 {
         return alphabet[Int(index)]
     }
 
-    @usableFromInline
+    
     static func encode(alphabet: [UInt8], thirdByte: UInt8?) -> UInt8 {
         guard let thirdByte = thirdByte else {
             // No third byte means just padding.

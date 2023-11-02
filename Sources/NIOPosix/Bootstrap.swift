@@ -81,9 +81,9 @@ public final class ServerBootstrap {
     private let childGroup: EventLoopGroup
     private var serverChannelInit: Optional<ChannelInitializerCallback>
     private var childChannelInit: Optional<ChannelInitializerCallback>
-    @usableFromInline
+    
     internal var _serverChannelOptions: ChannelOptions.Storage
-    @usableFromInline
+    
     internal var _childChannelOptions: ChannelOptions.Storage
     private var enableMPTCP: Bool
 
@@ -740,7 +740,7 @@ public final class ClientBootstrap: NIOClientTCPBootstrapProtocol {
             return self._channelInitializer
         }
     }
-    @usableFromInline
+    
     internal var _channelOptions: ChannelOptions.Storage
     private var connectTimeout: TimeAmount = TimeAmount.seconds(10)
     private var resolver: Optional<Resolver>
@@ -1380,7 +1380,7 @@ public final class DatagramBootstrap {
 
     private let group: EventLoopGroup
     private var channelInitializer: Optional<ChannelInitializerCallback>
-    @usableFromInline
+    
     internal var _channelOptions: ChannelOptions.Storage
     private var proto: NIOBSDSocket.ProtocolSubtype = .default
 
@@ -1924,7 +1924,7 @@ extension DatagramBootstrap: Sendable {}
 public final class NIOPipeBootstrap {
     private let group: EventLoopGroup
     private var channelInitializer: Optional<ChannelInitializerCallback>
-    @usableFromInline
+    
     internal var _channelOptions: ChannelOptions.Storage
 
     /// Create a `NIOPipeBootstrap` on the `EventLoopGroup` `group`.

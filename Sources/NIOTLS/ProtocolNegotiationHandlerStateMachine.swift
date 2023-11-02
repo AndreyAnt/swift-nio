@@ -29,7 +29,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
 
     private var state = State.initial
 
-    @usableFromInline
+    
     enum HandlerRemovedAction {
         case failPromise
     }
@@ -45,7 +45,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         }
     }
 
-    @usableFromInline
+    
     enum UserInboundEventTriggeredAction {
         case fireUserInboundEventTriggered
         case invokeUserClosure(ALPNResult)
@@ -71,7 +71,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         }
     }
 
-    @usableFromInline
+    
     enum ChannelReadAction {
         case fireChannelRead
     }
@@ -96,7 +96,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         }
     }
 
-    @usableFromInline
+    
     enum UserFutureCompletedAction {
         case fireErrorCaughtAndRemoveHandler(Error)
         case fireErrorCaughtAndStartUnbuffering(Error)
@@ -141,7 +141,7 @@ struct ProtocolNegotiationHandlerStateMachine<NegotiationResult> {
         }
     }
 
-    @usableFromInline
+    
     enum UnbufferAction {
         case fireChannelRead(NIOAny)
         case fireChannelReadCompleteAndRemoveHandler

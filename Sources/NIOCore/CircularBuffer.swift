@@ -16,13 +16,13 @@
 /// will automatically expand if more elements than `initialCapacity` are stored, it's advantageous to prevent
 /// expansions from happening frequently. Expansions will always force an allocation and a copy to happen.
 public struct CircularBuffer<Element>: CustomStringConvertible {
-    @usableFromInline
+    
     internal private(set) var _buffer: ContiguousArray<Element?>
 
-    @usableFromInline
+    
     internal private(set) var headBackingIndex: Int
 
-    @usableFromInline
+    
     internal private(set) var tailBackingIndex: Int
 
     
@@ -63,9 +63,9 @@ public struct CircularBuffer<Element>: CustomStringConvertible {
     /// - note: Every index is invalidated as soon as you perform a length-changing operating on the `CircularBuffer`
     ///         but remains valid when you replace one item by another using the subscript.
     public struct Index: Comparable, Sendable {
-        @usableFromInline private(set) var _backingIndex: UInt32
-        @usableFromInline private(set) var _backingCheck: _UInt24
-        @usableFromInline private(set) var isIndexGEQHeadIndex: Bool
+         private(set) var _backingIndex: UInt32
+         private(set) var _backingCheck: _UInt24
+         private(set) var isIndexGEQHeadIndex: Bool
 
         
         internal var backingIndex: Int {
@@ -103,7 +103,7 @@ public struct CircularBuffer<Element>: CustomStringConvertible {
             }
         }
 
-        @usableFromInline
+        
         internal func isValidIndex(for ring: CircularBuffer<Element>) -> Bool {
             return self._backingCheck == _UInt24.max || Int(self._backingCheck) == ring.count
          }
@@ -782,7 +782,7 @@ extension CircularBuffer: RangeReplaceableCollection {
 }
 
 extension CircularBuffer {
-    @usableFromInline
+    
     internal func verifyInvariants() -> Bool {
         var index = self.headBackingIndex
         while index != self.tailBackingIndex {

@@ -17,9 +17,9 @@
 ///
 /// The strategy of this type is that it keeps track of which side has closed, so that the handlers can work out
 /// which of them was "last", in order to arrange closure.
-@usableFromInline
+
 final class CloseRatchet {
-    @usableFromInline
+    
     enum State {
         case notClosed(isOutboundHalfClosureEnabled: Bool)
         case readClosed
@@ -60,7 +60,7 @@ final class CloseRatchet {
         }
     }
 
-    @usableFromInline
+    
     var _state: State
 
     
@@ -68,7 +68,7 @@ final class CloseRatchet {
         self._state = .notClosed(isOutboundHalfClosureEnabled: isOutboundHalfClosureEnabled)
     }
 
-    @usableFromInline
+    
     enum CloseReadAction {
         case nothing
         case close
@@ -79,7 +79,7 @@ final class CloseRatchet {
         return self._state.closeRead()
     }
 
-    @usableFromInline
+    
     enum CloseWriteAction {
         case nothing
         case close

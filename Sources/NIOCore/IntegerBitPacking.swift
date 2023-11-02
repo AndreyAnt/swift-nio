@@ -14,7 +14,7 @@
 
 // FIXME: Duplicated in NIO.
 
-@usableFromInline
+
 enum _IntegerBitPacking {}
 
 extension _IntegerBitPacking {
@@ -51,7 +51,7 @@ extension _IntegerBitPacking {
     }
 }
 
-@usableFromInline
+
 enum IntegerBitPacking {}
 
 extension IntegerBitPacking {

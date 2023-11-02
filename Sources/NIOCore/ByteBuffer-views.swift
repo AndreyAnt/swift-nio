@@ -21,8 +21,8 @@ public struct ByteBufferView: RandomAccessCollection, Sendable {
     public typealias Index = Int
     public typealias SubSequence = ByteBufferView
 
-    /* private but usableFromInline */ @usableFromInline var _buffer: ByteBuffer
-    /* private but usableFromInline */ @usableFromInline var _range: Range<Index>
+    /* private but usableFromInline */  var _buffer: ByteBuffer
+    /* private but usableFromInline */  var _range: Range<Index>
 
     
     internal init(buffer: ByteBuffer, range: Range<Index>) {

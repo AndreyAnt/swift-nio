@@ -1364,7 +1364,7 @@ class BaseSocketChannel<SocketType: BaseSocketProtocol>: SelectableChannel, Chan
 
 extension BaseSocketChannel {
     public struct SynchronousOptions: NIOSynchronousChannelOptions {
-        @usableFromInline // should be private
+         // should be private
         internal let _channel: BaseSocketChannel<SocketType>
 
          // should be fileprivate

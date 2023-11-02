@@ -23,7 +23,7 @@
 /// that much easier.
 public struct NIOLockedValueBox<Value> {
     
-    @usableFromInline
+    
     internal let _storage: LockStorage<Value>
 
     /// Initialize the `Value`.

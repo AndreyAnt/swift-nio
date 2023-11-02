@@ -52,7 +52,7 @@ extension NIOSerialEventLoopExecutor {
 /// executors. Adopters are recommended to conform their own event loop
 /// types to `SerialExecutor`.
 final class NIODefaultSerialEventLoopExecutor {
-    @usableFromInline
+    
     let loop: EventLoop
 
     

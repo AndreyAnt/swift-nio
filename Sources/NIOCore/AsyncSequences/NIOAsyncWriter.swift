@@ -80,18 +80,18 @@ extension NIOAsyncWriterSinkDelegate {
 /// Errors thrown by the ``NIOAsyncWriter``.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 public struct NIOAsyncWriterError: Error, Hashable, CustomStringConvertible {
-    @usableFromInline
+    
     internal enum _Code: String, Hashable, Sendable {
         case alreadyFinished
     }
 
-    @usableFromInline
+    
     let _code: _Code
 
-    @usableFromInline
+    
     var file: String
 
-    @usableFromInline
+    
     var line: Int
 
     
@@ -164,9 +164,9 @@ public struct NIOAsyncWriter<
     }
 
     /// This class is needed to hook the deinit to observe once all references to the ``NIOAsyncWriter`` are dropped.
-    @usableFromInline
+    
     /* fileprivate */ internal final class InternalClass: Sendable {
-        @usableFromInline
+        
         internal let _storage: Storage
 
         
@@ -180,7 +180,7 @@ public struct NIOAsyncWriter<
         }
     }
 
-    @usableFromInline
+    
     /* private */ internal let _internalClass: InternalClass
 
     
@@ -310,9 +310,9 @@ extension NIOAsyncWriter {
     /// - Important: Once all copies to the ``NIOAsyncWriter/Sink`` are destroyed the ``NIOAsyncWriter`` will get finished.
     public struct Sink {
         /// This class is needed to hook the deinit to observe once all references to the ``NIOAsyncWriter/Sink`` are dropped.
-        @usableFromInline
+        
         /* fileprivate */ internal final class InternalClass: Sendable {
-            @usableFromInline
+            
             /* fileprivate */ internal let _storage: Storage
 
             
@@ -327,7 +327,7 @@ extension NIOAsyncWriter {
             }
         }
 
-        @usableFromInline
+        
         /* private */ internal let _internalClass: InternalClass
 
         
@@ -379,17 +379,17 @@ extension NIOAsyncWriter {
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension NIOAsyncWriter {
     /// This is the underlying storage of the writer. The goal of this is to synchronize the access to all state.
-    @usableFromInline
+    
     /* fileprivate */ internal final class Storage: @unchecked Sendable {
         /// Internal type to generate unique yield IDs.
         ///
         /// This type has reference semantics.
-        @usableFromInline
+        
         struct YieldIDGenerator {
             /// A struct representing a unique yield ID.
-            @usableFromInline
+            
             struct YieldID: Equatable, Sendable {
-                @usableFromInline
+                
                 /* private */ internal var value: UInt64
 
                 
@@ -403,7 +403,7 @@ extension NIOAsyncWriter {
                 }
             }
 
-            @usableFromInline
+            
             /* private */ internal let _yieldIDCounter = ManagedAtomic<UInt64>(0)
 
             
@@ -415,13 +415,13 @@ extension NIOAsyncWriter {
         }
 
         /// The lock that protects our state.
-        @usableFromInline
+        
         /* private */ internal let _lock = NIOLock()
         /// The counter used to assign an ID to all our yields.
-        @usableFromInline
+        
         /* private */ internal let _yieldIDGenerator = YieldIDGenerator()
         /// The state machine.
-        @usableFromInline
+        
         /* private */ internal var _stateMachine: StateMachine
 
         
@@ -654,19 +654,19 @@ extension NIOAsyncWriter {
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension NIOAsyncWriter {
-    @usableFromInline
+    
     /* private */ internal struct StateMachine {
-        @usableFromInline
+        
         typealias YieldID = Storage.YieldIDGenerator.YieldID
         /// This is a small helper struct to encapsulate the two different values for a suspended yield.
-        @usableFromInline
+        
         /* private */ internal struct SuspendedYield {
             /// The yield's ID.
-            @usableFromInline
+            
             var yieldID: YieldID
             /// The yield's produced sequence of elements.
             /// The yield's continuation.
-            @usableFromInline
+            
             var continuation: CheckedContinuation<Void, Error>
 
             
@@ -677,7 +677,7 @@ extension NIOAsyncWriter {
         }
 
         /// The current state of our ``NIOAsyncWriter``.
-        @usableFromInline
+        
         /* private */ internal enum State {
             /// The initial state before either a call to ``NIOAsyncWriter/yield(contentsOf:)`` or
             /// ``NIOAsyncWriter/finish(completion:)`` happened.
@@ -714,7 +714,7 @@ extension NIOAsyncWriter {
         }
 
         /// The state machine's current state.
-        @usableFromInline
+        
         /* private */ internal var _state: State
 
         
@@ -726,7 +726,7 @@ extension NIOAsyncWriter {
         }
 
         /// Actions returned by `writerDeinitialized()`.
-        @usableFromInline
+        
         enum WriterDeinitializedAction {
             /// Indicates that ``NIOAsyncWriterSinkDelegate/didTerminate(completion:)`` should be called.
             case callDidTerminate(Delegate)
@@ -768,7 +768,7 @@ extension NIOAsyncWriter {
         }
 
         /// Actions returned by `setWritability()`.
-        @usableFromInline
+        
         enum SetWritabilityAction {
             /// Indicates that ``NIOAsyncWriterSinkDelegate/didYield(contentsOf:)`` should be called
             /// and all continuations should be resumed.
@@ -899,7 +899,7 @@ extension NIOAsyncWriter {
         }
 
         /// Actions returned by `yield()`.
-        @usableFromInline
+        
         enum YieldAction {
             /// Indicates that ``NIOAsyncWriterSinkDelegate/didYield(contentsOf:)`` should be called.
             case callDidYield(Delegate)
@@ -1085,7 +1085,7 @@ extension NIOAsyncWriter {
         }
 
         /// Actions returned by `cancel()`.
-        @usableFromInline
+        
         enum CancelAction {
             case resumeContinuation(CheckedContinuation<Void, Error>)
             /// Indicates that nothing should be done.
@@ -1164,7 +1164,7 @@ extension NIOAsyncWriter {
         }
 
         /// Actions returned by `writerFinish()`.
-        @usableFromInline
+        
         enum WriterFinishAction {
             /// Indicates that ``NIOAsyncWriterSinkDelegate/didTerminate(completion:)`` should be called.
             case callDidTerminate(Delegate)
@@ -1224,7 +1224,7 @@ extension NIOAsyncWriter {
         }
 
         /// Actions returned by `sinkFinish()`.
-        @usableFromInline
+        
         enum SinkFinishAction {
             /// Indicates that ``NIOAsyncWriterSinkDelegate/didTerminate(completion:)`` should be called.
             case callDidTerminate(Delegate, Error?)
@@ -1286,7 +1286,7 @@ extension NIOAsyncWriter {
         }
 
         /// Actions returned by `sinkFinish()`.
-        @usableFromInline
+        
         enum UnbufferQueuedEventsAction {
             case callDidYield(Delegate, Deque<Element>)
             case callDidYieldElement(Delegate, Element)

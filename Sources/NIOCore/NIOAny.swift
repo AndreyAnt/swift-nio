@@ -43,7 +43,7 @@
 ///         }
 ///     }
 public struct NIOAny {
-    @usableFromInline
+    
     /* private but _versioned */ let _storage: _NIOAny
 
     /// Wrap a value in a `NIOAny`. In most cases you should not create a `NIOAny` directly using this constructor.
@@ -54,7 +54,7 @@ public struct NIOAny {
         self._storage = _NIOAny(value)
     }
 
-    @usableFromInline
+    
     enum _NIOAny {
         case ioData(IOData)
         case bufferEnvelope(AddressedEnvelope<ByteBuffer>)

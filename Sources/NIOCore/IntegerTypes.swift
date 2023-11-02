@@ -17,9 +17,9 @@
 // FIXME: Duplicated in NIO.
 
 /// A 24-bit unsigned integer value type.
-@usableFromInline
+
 struct _UInt24: Sendable {
-    @usableFromInline var _backing: (UInt16, UInt8)
+     var _backing: (UInt16, UInt8)
 
     
     init(_ value: UInt32) {
@@ -29,10 +29,10 @@ struct _UInt24: Sendable {
 
     static let bitWidth: Int = 24
 
-    @usableFromInline
+    
     static let max: _UInt24 = .init((UInt32(1) << 24) - 1)
 
-    @usableFromInline
+    
     static let min: _UInt24 = .init(0)
 }
 
@@ -59,7 +59,7 @@ extension _UInt24: Equatable {
 }
 
 extension _UInt24: CustomStringConvertible {
-    @usableFromInline
+    
     var description: String {
         return UInt32(self).description
     }
@@ -69,7 +69,7 @@ extension _UInt24: CustomStringConvertible {
 
 /// A 56-bit unsigned integer value type.
 struct _UInt56: Sendable {
-    @usableFromInline var _backing: (UInt32, UInt16, UInt8)
+     var _backing: (UInt32, UInt16, UInt8)
 
      init(_ value: UInt64) {
         self._backing = IntegerBitPacking.unpackUInt32UInt16UInt8(value)

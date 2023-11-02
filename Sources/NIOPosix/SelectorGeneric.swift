@@ -402,8 +402,8 @@ enum SelectorStrategy {
 /// to mark events to allow for filtering of received return values to not be delivered to a
 /// new `Registration` instance that receives the same file descriptor. Ok if it wraps.
 /// Needed for i.e. testWeDoNotDeliverEventsForPreviouslyClosedChannels to succeed.
-@usableFromInline struct SelectorRegistrationID: Hashable {
-    @usableFromInline var _rawValue: UInt32
+ struct SelectorRegistrationID: Hashable {
+     var _rawValue: UInt32
 
      var rawValue: UInt32 {
         return self._rawValue

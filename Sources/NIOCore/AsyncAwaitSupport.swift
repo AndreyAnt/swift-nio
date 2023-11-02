@@ -316,11 +316,11 @@ extension AsyncSequence where Element == ByteBuffer {
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-@usableFromInline
+
 struct AsyncSequenceFromIterator<AsyncIterator: AsyncIteratorProtocol>: AsyncSequence {
-    @usableFromInline typealias Element = AsyncIterator.Element
+     typealias Element = AsyncIterator.Element
     
-    @usableFromInline var iterator: AsyncIterator
+     var iterator: AsyncIterator
     
      init(_ iterator: AsyncIterator) {
         self.iterator = iterator

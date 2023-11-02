@@ -48,7 +48,7 @@ public struct NIOThrowingAsyncSequenceProducer<
         /// The actual sequence which should be passed to the consumer.
         public let sequence: NIOThrowingAsyncSequenceProducer
 
-        @usableFromInline
+        
         /* fileprivate */ internal init(
             source: Source,
             sequence: NIOThrowingAsyncSequenceProducer
@@ -61,9 +61,9 @@ public struct NIOThrowingAsyncSequenceProducer<
     /// This class is needed to hook the deinit to observe once all references to the ``NIOThrowingAsyncSequenceProducer`` are dropped.
     ///
     /// If we get move-only types we should be able to drop this class and use the `deinit` of the ``AsyncIterator`` struct itself.
-    @usableFromInline
+    
     /* fileprivate */ internal final class InternalClass: Sendable {
-        @usableFromInline
+        
         internal let _storage: Storage
 
         
@@ -77,10 +77,10 @@ public struct NIOThrowingAsyncSequenceProducer<
         }
     }
 
-    @usableFromInline
+    
     /* private */ internal let _internalClass: InternalClass
 
-    @usableFromInline
+    
     /* private */ internal var _storage: Storage {
         self._internalClass._storage
     }
@@ -186,9 +186,9 @@ extension NIOThrowingAsyncSequenceProducer {
         /// This class is needed to hook the deinit to observe once all references to an instance of the ``AsyncIterator`` are dropped.
         ///
         /// If we get move-only types we should be able to drop this class and use the `deinit` of the ``AsyncIterator`` struct itself.
-        @usableFromInline
+        
         /* private */ internal final class InternalClass: Sendable {
-            @usableFromInline
+            
             /* private */ internal let _storage: Storage
 
             fileprivate init(storage: Storage) {
@@ -207,7 +207,7 @@ extension NIOThrowingAsyncSequenceProducer {
             }
         }
 
-        @usableFromInline
+        
         /* private */ internal let _internalClass: InternalClass
 
         fileprivate init(storage: Storage) {
@@ -233,9 +233,9 @@ extension NIOThrowingAsyncSequenceProducer {
         /// This class is needed to hook the deinit to observe once all references to the ``NIOThrowingAsyncSequenceProducer/Source`` are dropped.
         ///
         /// - Important: This is safe to be unchecked ``Sendable`` since the `storage` is ``Sendable`` and `immutable`.
-        @usableFromInline
+        
         /* fileprivate */ internal final class InternalClass: Sendable {
-            @usableFromInline
+            
             internal let _storage: Storage
 
             
@@ -250,15 +250,15 @@ extension NIOThrowingAsyncSequenceProducer {
             }
         }
 
-        @usableFromInline
+        
         /* private */ internal let _internalClass: InternalClass
 
-        @usableFromInline
+        
         /* private */ internal var _storage: Storage {
             self._internalClass._storage
         }
 
-        @usableFromInline
+        
         /* fileprivate */ internal init(storage: Storage) {
             self._internalClass = .init(storage: storage)
         }
@@ -345,19 +345,19 @@ extension NIOThrowingAsyncSequenceProducer {
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension NIOThrowingAsyncSequenceProducer {
     /// This is the underlying storage of the sequence. The goal of this is to synchronize the access to all state.
-    @usableFromInline
+    
     /* fileprivate */ internal final class Storage: @unchecked Sendable {
         /// The lock that protects our state.
-        @usableFromInline
+        
         /* private */ internal let _lock = NIOLock()
         /// The state machine.
-        @usableFromInline
+        
         /* private */ internal var _stateMachine: StateMachine
         /// The delegate.
-        @usableFromInline
+        
         /* private */ internal var _delegate: Delegate?
 
-        @usableFromInline
+        
         /* fileprivate */ internal init(
             backPressureStrategy: Strategy,
             delegate: Delegate
@@ -606,9 +606,9 @@ extension NIOThrowingAsyncSequenceProducer {
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension NIOThrowingAsyncSequenceProducer {
-    @usableFromInline
+    
     /* private */ internal struct StateMachine {
-        @usableFromInline
+        
         /* private */ internal enum State {
             /// The initial state before either a call to `yield()` or a call to `next()` happened
             case initial(
@@ -645,7 +645,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// The state machine's current state.
-        @usableFromInline
+        
         /* private */ internal var _state: State
 
         /// Initializes a new `StateMachine`.
@@ -663,7 +663,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// Actions returned by `sequenceDeinitialized()`.
-        @usableFromInline
+        
         enum SequenceDeinitializedAction {
             /// Indicates that ``NIOAsyncSequenceProducerDelegate/didTerminate()`` should be called.
             case callDidTerminate
@@ -753,7 +753,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// Actions returned by `iteratorDeinitialized()`.
-        @usableFromInline
+        
         enum IteratorDeinitializedAction {
             /// Indicates that ``NIOAsyncSequenceProducerDelegate/didTerminate()`` should be called.
             case callDidTerminate
@@ -792,7 +792,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// Actions returned by `yield()`.
-        @usableFromInline
+        
         enum YieldAction {
             /// Indicates that ``NIOThrowingAsyncSequenceProducer/Source/YieldResult/produceMore`` should be returned.
             case returnProduceMore
@@ -813,7 +813,7 @@ extension NIOThrowingAsyncSequenceProducer {
             /// Indicates that the yielded elements have been dropped.
             case returnDropped
 
-            @usableFromInline
+            
             init(shouldProduceMore: Bool, continuationAndElement: (CheckedContinuation<Element?, Error>, Element)? = nil) {
                 switch (shouldProduceMore, continuationAndElement) {
                 case (true, .none):
@@ -912,7 +912,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// Actions returned by `finish()`.
-        @usableFromInline
+        
         enum FinishAction {
             /// Indicates that the continuation should be resumed with `nil` and
             /// that ``NIOAsyncSequenceProducerDelegate/didTerminate()`` should be called.
@@ -964,7 +964,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// Actions returned by `cancelled()`.
-        @usableFromInline
+        
         enum CancelledAction {
             /// Indicates that ``NIOAsyncSequenceProducerDelegate/didTerminate()`` should be called.
             case callDidTerminate
@@ -1026,7 +1026,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// Actions returned by `next()`.
-        @usableFromInline
+        
         enum NextAction {
             /// Indicates that the element should be returned to the caller.
             case returnElement(Element)
@@ -1134,7 +1134,7 @@ extension NIOThrowingAsyncSequenceProducer {
         }
 
         /// Actions returned by `next(for:)`.
-        @usableFromInline
+        
         enum NextForContinuationAction {
             /// Indicates that ``NIOAsyncSequenceProducerDelegate/produceMore()`` should be called.
             case callProduceMore

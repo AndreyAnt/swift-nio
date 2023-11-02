@@ -99,9 +99,9 @@ extension SelectorEventSet {
 
 // EPollUserData supports (un)packing into an `UInt64` because epoll has a user info field that we can attach which is
 // up to 64 bits wide. We're using all of those 64 bits, 32 for a "registration ID" and 32 for the file descriptor.
-@usableFromInline struct EPollUserData {
-    @usableFromInline var registrationID: SelectorRegistrationID
-    @usableFromInline var fileDescriptor: CInt
+ struct EPollUserData {
+     var registrationID: SelectorRegistrationID
+     var fileDescriptor: CInt
 
      init(registrationID: SelectorRegistrationID, fileDescriptor: CInt) {
         assert(MemoryLayout<UInt64>.size == MemoryLayout<EPollUserData>.size)

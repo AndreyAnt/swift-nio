@@ -185,7 +185,7 @@ extension NIOSingleStepByteToMessageDecoder {
 ///     let channelFuture = bootstrap.bind(host: "127.0.0.1", port: 0)
 ///
 public final class NIOSingleStepByteToMessageProcessor<Decoder: NIOSingleStepByteToMessageDecoder> {
-    @usableFromInline
+    
     enum DecodeMode {
         /// This is a usual decode, ie. not the last chunk
         case normal
@@ -193,11 +193,11 @@ public final class NIOSingleStepByteToMessageProcessor<Decoder: NIOSingleStepByt
         case last
     }
 
-    @usableFromInline
+    
     internal private(set) var decoder: Decoder
-    @usableFromInline
+    
     let maximumBufferSize: Int?
-    @usableFromInline
+    
     internal private(set) var _buffer: ByteBuffer?
 
     /// Initialize a `NIOSingleStepByteToMessageProcessor`.

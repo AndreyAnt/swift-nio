@@ -23,9 +23,9 @@ import ucrt
 #error("The Heap module was unable to identify your C library.")
 #endif
 
-@usableFromInline
+
 internal struct Heap<Element: Comparable> {
-    @usableFromInline
+    
     internal private(set) var storage: Array<Element>
 
     
@@ -215,9 +215,9 @@ extension Heap: CustomDebugStringConvertible {
     }
 }
 
-@usableFromInline
+
 struct HeapIterator<Element: Comparable>: IteratorProtocol {
-    /* private but */ @usableFromInline
+    /* private but */ 
     var _heap: Heap<Element>
 
     

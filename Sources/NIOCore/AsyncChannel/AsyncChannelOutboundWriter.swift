@@ -19,17 +19,17 @@
 /// the channel becomes writable again.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 public struct NIOAsyncChannelOutboundWriter<OutboundOut: Sendable>: Sendable {
-    @usableFromInline
+    
     typealias _Writer = NIOAsyncChannelOutboundWriterHandler<OutboundOut>.Writer
 
     /// An `AsyncSequence` backing a ``NIOAsyncChannelOutboundWriter`` for testing purposes.
     public struct TestSink: AsyncSequence {
         public typealias Element = OutboundOut
 
-        @usableFromInline
+        
         internal let stream: AsyncStream<OutboundOut>
 
-        @usableFromInline
+        
         internal let continuation: AsyncStream<OutboundOut>.Continuation
 
         
@@ -46,7 +46,7 @@ public struct NIOAsyncChannelOutboundWriter<OutboundOut: Sendable>: Sendable {
         }
 
         public struct AsyncIterator: AsyncIteratorProtocol {
-            @usableFromInline
+            
             internal var iterator: AsyncStream<OutboundOut>.AsyncIterator
 
             
@@ -60,13 +60,13 @@ public struct NIOAsyncChannelOutboundWriter<OutboundOut: Sendable>: Sendable {
         }
     }
 
-    @usableFromInline
+    
     enum Backing: Sendable {
         case asyncStream(AsyncStream<OutboundOut>.Continuation)
         case writer(_Writer)
     }
 
-    @usableFromInline
+    
     internal let _backing: Backing
 
     /// Creates a new ``NIOAsyncChannelOutboundWriter`` backed by a ``NIOAsyncChannelOutboundWriter/TestSink``.

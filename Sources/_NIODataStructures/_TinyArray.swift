@@ -29,13 +29,13 @@
 /// It supports arbitrary many elements but if only up to one ``Element`` is stored it does **not** allocate separate storage on the heap
 /// and instead stores the ``Element`` inline.
 public struct _TinyArray<Element> {
-    @usableFromInline
+    
     enum Storage {
         case one(Element)
         case arbitrary([Element])
     }
 
-    @usableFromInline
+    
     var storage: Storage
 }
 
@@ -56,12 +56,12 @@ extension _TinyArray: RandomAccessCollection {
     }
 
     public struct Iterator: IteratorProtocol {
-        @usableFromInline
+        
         let _storage: Storage
-        @usableFromInline
+        
         var _index: Index
 
-        @usableFromInline
+        
         init(storage: Storage) {
             self._storage = storage
             self._index = storage.startIndex

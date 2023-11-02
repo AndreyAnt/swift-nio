@@ -35,7 +35,7 @@ private extension UInt8 {
 /// a more convenient method of interacting with a masking key than simply by passing
 /// around a four-tuple.
 public struct WebSocketMaskingKey: Sendable {
-    @usableFromInline internal let _key: (UInt8, UInt8, UInt8, UInt8)
+     internal let _key: (UInt8, UInt8, UInt8, UInt8)
 
     public init?<T: Collection>(_ buffer: T) where T.Element == UInt8 {
         guard buffer.count == 4 else {
@@ -54,7 +54,7 @@ public struct WebSocketMaskingKey: Sendable {
     /// - parameters:
     ///     - integer: The encoded network representation of the
     ///         masking key.
-    @usableFromInline
+    
     internal init(networkRepresentation integer: UInt32) {
         self._key = (UInt8((integer & 0xFF000000) >> 24),
                      UInt8((integer & 0x00FF0000) >> 16),

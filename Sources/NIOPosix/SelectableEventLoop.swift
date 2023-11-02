@@ -33,7 +33,7 @@ internal func withAutoReleasePool<T>(_ execute: () throws -> T) rethrows -> T {
 /// `EventLoop` implementation that uses a `Selector` to get notified once there is more I/O or tasks to process.
 /// The whole processing of I/O and tasks is done by a `NIOThread` that is tied to the `SelectableEventLoop`. This `NIOThread`
 /// is guaranteed to never change!
-@usableFromInline
+
 internal final class SelectableEventLoop: EventLoop {
 
     static let strictModeEnabled: Bool = {
@@ -69,19 +69,19 @@ internal final class SelectableEventLoop: EventLoop {
 
     /* private but tests */ internal let _selector: NIOPosix.Selector<NIORegistration>
     private let thread: NIOThread
-    @usableFromInline
+    
     // _pendingTaskPop is set to `true` if the event loop is about to pop tasks off the task queue.
     // This may only be read/written while holding the _tasksLock.
     internal var _pendingTaskPop = false
-    @usableFromInline
+    
     internal var scheduledTaskCounter = ManagedAtomic<UInt64>(0)
-    @usableFromInline
+    
     internal var _scheduledTasks = PriorityQueue<ScheduledTask>()
 
     // We only need the ScheduledTask's task closure. However, an `Array<() -> Void>` allocates
     // for every appended closure. https://bugs.swift.org/browse/SR-15872
     private var tasksCopy = ContiguousArray<ScheduledTask>()
-    @usableFromInline
+    
     internal var _succeededVoidFuture: Optional<EventLoopFuture<Void>> = nil {
         didSet {
             self.assertInEventLoop()
@@ -89,7 +89,7 @@ internal final class SelectableEventLoop: EventLoop {
     }
 
     private let canBeShutdownIndividually: Bool
-    @usableFromInline
+    
     internal let _tasksLock = NIOLock()
     private let _externalStateLock = NIOLock()
     private var externalStateLock: NIOLock {
@@ -106,7 +106,7 @@ internal final class SelectableEventLoop: EventLoop {
     let msgBufferPool: Pool<PooledMsgBuffer>
 
     // The `_parentGroup` will always be set unless this is a thread takeover or we shut down.
-    @usableFromInline
+    
     internal var _parentGroup: Optional<MultiThreadedEventLoopGroup>
 
     /// Creates a new `SelectableEventLoop` instance that is tied to the given `pthread_t`.
@@ -114,7 +114,7 @@ internal final class SelectableEventLoop: EventLoop {
     private let promiseCreationStoreLock = NIOLock()
     private var _promiseCreationStore: [_NIOEventLoopFutureIdentifier: (file: StaticString, line: UInt)] = [:]
 
-    @usableFromInline
+    
     internal func _promiseCreated(futureIdentifier: _NIOEventLoopFutureIdentifier, file: StaticString, line: UInt) {
         precondition(_isDebugAssertConfiguration())
         self.promiseCreationStoreLock.withLock {
@@ -122,7 +122,7 @@ internal final class SelectableEventLoop: EventLoop {
         }
     }
 
-    @usableFromInline
+    
     internal func _promiseCompleted(futureIdentifier: _NIOEventLoopFutureIdentifier) -> (file: StaticString, line: UInt)? {
         precondition(_isDebugAssertConfiguration())
         return self.promiseCreationStoreLock.withLock {
@@ -130,7 +130,7 @@ internal final class SelectableEventLoop: EventLoop {
         }
     }
 
-    @usableFromInline
+    
     internal func _preconditionSafeToWait(file: StaticString, line: UInt) {
         let explainer: () -> String = { """
 BUG DETECTED: wait() must not be called when on an EventLoop.
@@ -147,7 +147,7 @@ Further information:
         precondition(MultiThreadedEventLoopGroup.currentEventLoop == nil, explainer(), file: file, line: line)
     }
 
-    @usableFromInline
+    
     internal var _validInternalStateToScheduleTasks: Bool {
         switch self.internalState {
         case .exitingThread:
@@ -244,7 +244,7 @@ Further information:
     }
 
     /// - see: `EventLoop.inEventLoop`
-    @usableFromInline
+    
     internal var inEventLoop: Bool {
         return thread.isCurrent
     }
@@ -301,7 +301,7 @@ Further information:
 
     #if swift(>=5.9)
     @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-    @usableFromInline
+    
     func enqueue(_ job: consuming ExecutorJob) {
         let scheduledTask = ScheduledTask(
             id: self.scheduledTaskCounter.loadThenWrappingIncrement(ordering: .relaxed),
@@ -314,7 +314,7 @@ Further information:
     #endif
 
     /// Add the `ScheduledTask` to be executed.
-    @usableFromInline
+    
     internal func _schedule0(_ task: ScheduledTask) throws {
         if self.inEventLoop {
             precondition(self._validInternalStateToScheduleTasks,
@@ -368,7 +368,7 @@ Further information:
     }
 
     /// Wake the `Selector` which means `Selector.whenReady(...)` will unblock.
-    @usableFromInline
+    
     internal func _wakeupSelector() throws {
         try _selector.wakeup()
     }
@@ -634,7 +634,7 @@ Further information:
         }
     }
 
-    @usableFromInline
+    
     func shutdownGracefully(queue: DispatchQueue, _ callback: @escaping (Error?) -> Void) {
         if self.canBeShutdownIndividually {
             self.initiateClose(queue: queue) { result in
@@ -675,12 +675,12 @@ Further information:
 }
 
 extension SelectableEventLoop: CustomStringConvertible, CustomDebugStringConvertible {
-    @usableFromInline
+    
     var description: String {
         return "SelectableEventLoop { selector = \(self._selector), thread = \(self.thread) }"
     }
 
-    @usableFromInline
+    
     var debugDescription: String {
         return self._tasksLock.withLock {
             return "SelectableEventLoop { selector = \(self._selector), thread = \(self.thread), scheduledTasks = \(self._scheduledTasks.description) }"

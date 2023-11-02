@@ -15,9 +15,9 @@
 /// A ``ChannelHandler`` that is used to transform the inbound portion of a NIO
 /// ``Channel`` into an asynchronous sequence that supports back-pressure.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-@usableFromInline
+
 internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Sendable, ProducerElement: Sendable>: ChannelDuplexHandler {
-    @usableFromInline
+    
     enum _ProducingState {
         // Not .stopProducing
         case keepProducing
@@ -29,13 +29,13 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
         case producingPausedWithOutstandingRead
     }
 
-    @usableFromInline
+    
     typealias OutboundIn = Any
 
-    @usableFromInline
+    
     typealias OutboundOut = Any
 
-    @usableFromInline
+    
     typealias Source = NIOThrowingAsyncSequenceProducer<
         ProducerElement,
         Error,
@@ -44,31 +44,31 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
     >.Source
 
     /// The source of the asynchronous sequence.
-    @usableFromInline
+    
     var source: Source?
 
     /// The channel handler's context.
-    @usableFromInline
+    
     var context: ChannelHandlerContext?
 
     /// An array of reads which will be yielded to the source with the next channel read complete.
-    @usableFromInline
+    
     var buffer: [ProducerElement] = []
 
     /// The current producing state.
-    @usableFromInline
+    
     var producingState: _ProducingState = .keepProducing
 
     /// The event loop.
-    @usableFromInline
+    
     let eventLoop: EventLoop
 
     /// The shared `CloseRatchet` between this handler and the writer handler.
-    @usableFromInline
+    
     let closeRatchet: CloseRatchet
 
     /// A type indicating what kind of transformation to apply to reads.
-    @usableFromInline
+    
     enum Transformation {
         /// A synchronous transformation is applied to incoming reads. This is used when sync wrapping a channel.
         case syncWrapping((InboundIn) -> ProducerElement)
@@ -78,7 +78,7 @@ internal final class NIOAsyncChannelInboundStreamChannelHandler<InboundIn: Senda
     }
 
     /// The transformation applied to incoming reads.
-    @usableFromInline
+    
     let transformation: Transformation
 
     
@@ -306,15 +306,15 @@ extension NIOAsyncChannelInboundStreamChannelHandler {
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-@usableFromInline
+
 struct NIOAsyncChannelInboundStreamChannelHandlerProducerDelegate: @unchecked Sendable, NIOAsyncSequenceProducerDelegate {
-    @usableFromInline
+    
     let eventLoop: EventLoop
 
-    @usableFromInline
+    
     let _didTerminate: () -> Void
 
-    @usableFromInline
+    
     let _produceMore: () -> Void
 
     

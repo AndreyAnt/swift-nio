@@ -17,36 +17,36 @@ import DequeModule
 /// A ``ChannelHandler`` that is used to write the outbound portion of a NIO
 /// ``Channel`` from Swift Concurrency with back-pressure support.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-@usableFromInline
-internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>: ChannelDuplexHandler {
-    @usableFromInline typealias InboundIn = Any
-    @usableFromInline typealias InboundOut = Any
-    @usableFromInline typealias OutboundIn = Any
-    @usableFromInline typealias OutboundOut = OutboundOut
 
-    @usableFromInline
+internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>: ChannelDuplexHandler {
+     typealias InboundIn = Any
+     typealias InboundOut = Any
+     typealias OutboundIn = Any
+     typealias OutboundOut = OutboundOut
+
+    
     typealias Writer = NIOAsyncWriter<
         OutboundOut,
         NIOAsyncChannelOutboundWriterHandler<OutboundOut>.Delegate
     >
 
-    @usableFromInline
+    
     typealias Sink = Writer.Sink
 
     /// The sink of the ``NIOAsyncWriter``.
-    @usableFromInline
+    
     var sink: Sink?
 
     /// The channel handler context.
-    @usableFromInline
+    
     var context: ChannelHandlerContext?
 
     /// The event loop.
-    @usableFromInline
+    
     let eventLoop: EventLoop
 
     /// The shared `CloseRatchet` between this handler and the inbound stream handler.
-    @usableFromInline
+    
     let closeRatchet: CloseRatchet
 
     
@@ -163,15 +163,15 @@ internal final class NIOAsyncChannelOutboundWriterHandler<OutboundOut: Sendable>
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension NIOAsyncChannelOutboundWriterHandler {
-    @usableFromInline
+    
     struct Delegate: @unchecked Sendable, NIOAsyncWriterSinkDelegate {
-        @usableFromInline
+        
         typealias Element = OutboundOut
 
-        @usableFromInline
+        
         let eventLoop: EventLoop
 
-        @usableFromInline
+        
         let handler: NIOAsyncChannelOutboundWriterHandler<OutboundOut>
 
         

@@ -23,9 +23,9 @@ import CNIOLinux
 /// A `Scheduled` allows the user to either `cancel()` the execution of the scheduled task (if possible) or obtain a reference to the `EventLoopFuture` that
 /// will be notified once the execution is complete.
 public struct Scheduled<T> {
-    @usableFromInline typealias CancelationCallback = @Sendable () -> Void
-    /* private but usableFromInline */ @usableFromInline let _promise: EventLoopPromise<T>
-    /* private but usableFromInline */ @usableFromInline let _cancellationTask: CancelationCallback
+     typealias CancelationCallback = @Sendable () -> Void
+    /* private but usableFromInline */  let _promise: EventLoopPromise<T>
+    /* private but usableFromInline */  let _cancellationTask: CancelationCallback
     
     
     @preconcurrency
@@ -575,7 +575,7 @@ public struct NIODeadline: Equatable, Hashable, Sendable {
     public typealias Value = UInt64
 
     // This really should be an UInt63 but we model it as Int64 with >=0 assert
-    /* private but */ @usableFromInline var _uptimeNanoseconds: Int64 {
+    /* private but */  var _uptimeNanoseconds: Int64 {
         didSet {
             assert(self._uptimeNanoseconds >= 0)
         }
@@ -715,7 +715,7 @@ extension EventLoop {
     public func submit<T>(_ task: @escaping @Sendable () throws -> T) -> EventLoopFuture<T> {
         _submit(task)
     }
-    @usableFromInline typealias SubmitCallback<T> = @Sendable () throws -> T
+     typealias SubmitCallback<T> = @Sendable () throws -> T
 
     
     func _submit<T>(_ task: @escaping SubmitCallback<T>) -> EventLoopFuture<T> {
@@ -745,7 +745,7 @@ extension EventLoop {
     public func flatSubmit<T>(_ task: @escaping @Sendable () -> EventLoopFuture<T>) -> EventLoopFuture<T> {
         self._flatSubmit(task)
     }
-    @usableFromInline typealias FlatSubmitCallback<T> = @Sendable () -> EventLoopFuture<T>
+     typealias FlatSubmitCallback<T> = @Sendable () -> EventLoopFuture<T>
 
     
     func _flatSubmit<T>(_ task: @escaping FlatSubmitCallback<T>) -> EventLoopFuture<T> {
@@ -771,7 +771,7 @@ extension EventLoop {
     ) -> Scheduled<T> {
         self._flatScheduleTask(deadline: deadline, file: file, line: line, task)
     }
-    @usableFromInline typealias FlatScheduleTaskDeadlineCallback<T> = () throws -> EventLoopFuture<T>
+     typealias FlatScheduleTaskDeadlineCallback<T> = () throws -> EventLoopFuture<T>
 
     @discardableResult
     
@@ -808,7 +808,7 @@ extension EventLoop {
         self._flatScheduleTask(in: delay, file: file, line: line, task)
     }
     
-    @usableFromInline typealias FlatScheduleTaskDelayCallback<T> = @Sendable () throws -> EventLoopFuture<T>
+     typealias FlatScheduleTaskDelayCallback<T> = @Sendable () throws -> EventLoopFuture<T>
 
     
     func _flatScheduleTask<T>(

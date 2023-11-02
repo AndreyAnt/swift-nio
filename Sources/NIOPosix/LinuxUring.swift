@@ -18,7 +18,7 @@
 import CNIOLinux
 import NIOCore
 
-@usableFromInline
+
 enum CQEEventType: UInt8 {
     case poll = 1, pollModify, pollDelete // start with 1 to not get zero bit patterns for stdin
 }
@@ -41,11 +41,11 @@ internal extension TimeAmount {
 // URingUserData supports (un)packing into an `UInt64` as io_uring has a user_data 64-bit payload which is set in the SQE
 // and returned in the CQE. We're using 56 of those 64 bits, 32 for the file descriptor, 16 for a "registration ID" and 8
 // for the type of event issued (poll/modify/delete).
-@usableFromInline struct URingUserData {
-    @usableFromInline var fileDescriptor: CInt
-    @usableFromInline var registrationID: UInt16 // SelectorRegistrationID truncated, only have room for bottom 16 bits (could be expanded to 24 if required)
-    @usableFromInline var eventType: CQEEventType
-    @usableFromInline var padding: Int8 // reserved for future use
+ struct URingUserData {
+     var fileDescriptor: CInt
+     var registrationID: UInt16 // SelectorRegistrationID truncated, only have room for bottom 16 bits (could be expanded to 24 if required)
+     var eventType: CQEEventType
+     var padding: Int8 // reserved for future use
 
      init(registrationID: SelectorRegistrationID, fileDescriptor: CInt, eventType: CQEEventType) {
         assert(MemoryLayout<UInt64>.size == MemoryLayout<URingUserData>.size)
